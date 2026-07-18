@@ -179,25 +179,28 @@ jobs:
   #         echo "role_arn=$(aws cloudformation describe-stacks --stack-name stornoway --query "Stacks[0].Outputs[?OutputKey=='StaticContentDeployRoleArn'].OutputValue" --output text)" >> $GITHUB_OUTPUT
   #         echo "cloudfront_distribution_id=$(aws cloudformation describe-stacks --stack-name stornoway --query "Stacks[0].Outputs[?OutputKey=='CloudFrontDistributionId'].OutputValue" --output text)" >> $GITHUB_OUTPUT
 
-  # upload-to-s3:
-  #   if: github.event_name == 'push'
-  #   needs:
-  #     - build
-  #     - infra
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Download build artifact
-  #       uses: actions/download-artifact@v8
-  #       with:
-  #         name: build
-  #     - name: Configure AWS Credentials
-  #       uses: aws-actions/configure-aws-credentials@v6
-  #       with:
-  #         role-to-assume: ${{ needs.infra.outputs.static-content-deploy-role-arn }}
-  #         aws-region: us-east-1
+  upload-to-s3:
+    name: Upload static site to S3 bucket
+    if: github.event_name == 'push'
+    needs:
+      - prepare
+      - build
+      - deploy-deploy-role
+      - deploy-cloudfront
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download build artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: build
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: ${{ fromJSON(needs.deploy-deploy-role.outputs.stack-outputs-json).StaticContentDeployRoleArn }}
+          aws-region: us-east-1
 
-  #     - name: Deploy static site to S3 bucket
-  #       run: aws s3 sync ./ s3://cv2.molnarbence.dev --delete
+      - name: Deploy static site to S3 bucket
+        run: aws s3 sync ./ s3://${{ needs.prepare.outputs.domain_name }} --delete
 
-  #     - name: Invalidate cache
-  #       run: aws cloudfront create-invalidation --distribution-id ${{ needs.infra.outputs.cloudfront-distribution-id }} --paths "/*"
+      - name: Invalidate cache
+        run: aws cloudfront create-invalidation --distribution-id ${{ fromJSON(needs.deploy-cloudfront.outputs.stack-outputs-json).CloudFrontDistributionId }} --paths "/*"

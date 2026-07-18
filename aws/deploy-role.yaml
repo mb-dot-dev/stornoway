@@ -16,6 +16,11 @@ Parameters:
     Type: String
     Description: 'The ARN of the CloudFront distribution to be invalidated after static content deployment.'
 
+Outputs:
+  StaticContentDeployRoleArn:
+    Description: 'The ARN of the IAM role for GitHub Actions to deploy static content.'
+    Value: !GetAtt StaticContentDeployRole.Arn
+
 Resources:
   StaticContentDeployRole:
     Type: 'AWS::IAM::Role'
