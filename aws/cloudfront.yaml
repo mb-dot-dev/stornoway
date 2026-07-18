@@ -62,7 +62,7 @@ Resources:
           Bucket: ''
           Prefix: ''
         Comment: ''
-        DefaultRootObject: 'index.html'
+        DefaultRootObject: ''
         Origins:
           - Id: !Ref BucketDomainName
             ConnectionTimeout: 10

@@ -15,8 +15,8 @@ Outputs:
     Description: 'The ARN of the S3 bucket'
     Value: !GetAtt WebsiteBucket.Arn
   BucketDomainName:
-    Description: 'The domain name of the S3 bucket'
-    Value: !GetAtt WebsiteBucket.DomainName
+    Description: 'The website endpoint domain name of the S3 bucket, used as the CloudFront origin for automatic index-document resolution'
+    Value: !Select [2, !Split ['/', !GetAtt WebsiteBucket.WebsiteURL]]
 
 Resources:
   WebsiteBucket:
