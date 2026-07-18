@@ -9,6 +9,10 @@ Parameters:
   DomainName:
     Type: String
     Description: 'The domain name and the S3 bucket name at the same time'
+  CertificateArn:
+    Type: AWS::SSM::Parameter::Value<String>
+    Description: 'The ARN of the ACM certificate for the domain, stored in SSM Parameter'
+    Default: '/certificates/molnarbence.dev'
   
 Outputs:
   CloudFrontDistributionId:
@@ -75,7 +79,7 @@ Resources:
           MinimumProtocolVersion: 'TLSv1.2_2021'
           SslSupportMethod: 'sni-only'
           # CloudFrontDefaultCertificate: false
-          AcmCertificateArn: !Sub 'arn:aws:acm:eu-central-1:${AWS::AccountId}:certificate/d5718394-ab95-483b-b7fd-d352ad9205c1'
+          AcmCertificateArn: !Ref CertificateArn
         PriceClass: 'PriceClass_All'
         DefaultCacheBehavior:
           Compress: true
