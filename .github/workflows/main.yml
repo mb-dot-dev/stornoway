@@ -62,6 +62,20 @@ jobs:
           cfn-lint --version
           cfn-lint -t ./aws/*.yaml
 
+  deploy-resource-group:
+    name: Deploy Resource Group
+    needs:
+      - prepare
+      - cfn-lint
+    uses: mb-dot-dev/reusable-workflows/.github/workflows/deploy-cloudformation.yaml@main
+    secrets: inherit
+    with:
+      stack-name: ${{ needs.prepare.outputs.project_name }}-resource-group
+      template: aws/resource-group.yml
+      project: ${{ needs.prepare.outputs.project_name }}
+      parameter-overrides: >-
+        ProjectName=${{ needs.prepare.outputs.project_name }}
+
   # infra:
   #   if: github.event_name == 'push'
   #   runs-on: ubuntu-latest
