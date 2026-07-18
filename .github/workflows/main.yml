@@ -124,22 +124,6 @@ jobs:
         DomainName=${{ needs.prepare.outputs.domain_name }},
         CloudFrontDistributionArn=${{ fromJSON(needs.deploy-cloudfront.outputs.stack-outputs-json).CloudFrontDistributionArn }}
  
-  deploy-route53:
-    name: Deploy Route53 DNS Records
-    needs:
-      - prepare
-      - cfn-lint
-      - deploy-cloudfront
-    uses: mb-dot-dev/reusable-workflows/.github/workflows/deploy-cloudformation.yaml@main
-    secrets: inherit
-    with:
-      stack-name: ${{ needs.prepare.outputs.project_name }}-route53
-      template: aws/route53.yaml
-      project: ${{ needs.prepare.outputs.project_name }}
-      parameter-overrides: >-
-        DomainName=${{ needs.prepare.outputs.domain_name }},
-        CloudFrontDistributionDomainName=${{ fromJSON(needs.deploy-cloudfront.outputs.stack-outputs-json).CloudFrontDistributionDomainName }}
-
   upsert-cloudflare:
     name: Upsert Cloudflare DNS Records
     needs:
