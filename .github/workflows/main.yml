@@ -40,6 +40,7 @@ jobs:
 
     outputs:
       static-content-deploy-role-arn: ${{ steps.set-output.outputs.role_arn }}
+      cloudfront-distribution-id: ${{ steps.set-output.outputs.cloudfront_distribution_id }}
 
     steps:
       - name: Checkout
@@ -67,7 +68,9 @@ jobs:
 
       - name: Set output variable
         id: set-output
-        run: echo "role_arn=$(aws cloudformation describe-stacks --stack-name stornoway --query "Stacks[0].Outputs[?OutputKey=='StaticContentDeployRoleArn'].OutputValue" --output text)" >> $GITHUB_OUTPUT
+        run: |
+          echo "role_arn=$(aws cloudformation describe-stacks --stack-name stornoway --query "Stacks[0].Outputs[?OutputKey=='StaticContentDeployRoleArn'].OutputValue" --output text)" >> $GITHUB_OUTPUT
+          echo "cloudfront_distribution_id=$(aws cloudformation describe-stacks --stack-name stornoway --query "Stacks[0].Outputs[?OutputKey=='CloudFrontDistributionId'].OutputValue" --output text)" >> $GITHUB_OUTPUT
 
   upload-to-s3:
     if: github.event_name == 'push'
@@ -90,4 +93,4 @@ jobs:
         run: aws s3 sync ./ s3://cv2.molnarbence.dev --delete
 
       - name: Invalidate cache
-        run: aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"
+        run: aws cloudfront create-invalidation --distribution-id ${{ needs.infra.outputs.cloudfront-distribution-id }} --paths "/*"

@@ -8,6 +8,11 @@ Parameters:
     Description: 'The domain name and the S3 bucket name at the same time'
     Default: 'cv2.molnarbence.dev'
 
+Outputs:
+  CloudFrontDistributionId:
+    Description: 'The ID of the CloudFront distribution'
+    Value: !Ref CloudFrontDistribution
+
 Resources:
   CloudFrontDistribution:
     UpdateReplacePolicy: 'Delete'
