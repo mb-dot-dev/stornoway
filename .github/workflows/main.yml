@@ -35,6 +35,7 @@ jobs:
           path: dist
 
   infra:
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
 
     outputs:
@@ -69,6 +70,7 @@ jobs:
         run: echo "role_arn=$(aws cloudformation describe-stacks --stack-name stornoway --query "Stacks[0].Outputs[?OutputKey=='StaticContentDeployRoleArn'].OutputValue" --output text)" >> $GITHUB_OUTPUT
 
   upload-to-s3:
+    if: github.event_name == 'push'
     needs:
       - build
       - infra
