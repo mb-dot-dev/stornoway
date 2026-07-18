@@ -62,7 +62,7 @@ jobs:
             --template-file ./aws/stornoway.yml \
             --stack-name stornoway \
             --capabilities CAPABILITY_NAMED_IAM \
-            --parameter-overrides DomainName=cv.molnarbence.dev
+            --parameter-overrides DomainName=cv2.molnarbence.dev
 
       - name: Set output variable
         id: set-output
@@ -85,7 +85,7 @@ jobs:
           aws-region: us-east-1
 
       - name: Deploy static site to S3 bucket
-        run: aws s3 sync ./ s3://cv.molnarbence.dev --delete
+        run: aws s3 sync ./ s3://cv2.molnarbence.dev --delete
 
       - name: Invalidate cache
         run: aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"

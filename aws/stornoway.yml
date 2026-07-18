@@ -6,7 +6,7 @@ Parameters:
   DomainName:
     Type: String
     Description: 'The domain name and the S3 bucket name at the same time'
-    Default: 'cv.molnarbence.dev'
+    Default: 'cv2.molnarbence.dev'
 
 Resources:
   CloudFrontDistribution:
@@ -30,7 +30,7 @@ Resources:
             OriginShield:
               Enabled: false
             OriginPath: ''
-            Id: 'cv.molnarbence.dev.s3.eu-central-1.amazonaws.com-mfwtonjt09o'
+            Id: 'cv2.molnarbence.dev.s3.eu-central-1.amazonaws.com-mfwtonjt09o'
             CustomOriginConfig:
               IpAddressType: 'ipv4'
               OriginReadTimeout: 30
@@ -53,7 +53,7 @@ Resources:
           Compress: true
           FunctionAssociations: []
           LambdaFunctionAssociations: []
-          TargetOriginId: 'cv.molnarbence.dev.s3.eu-central-1.amazonaws.com-mfwtonjt09o'
+          TargetOriginId: 'cv2.molnarbence.dev.s3.eu-central-1.amazonaws.com-mfwtonjt09o'
           ViewerProtocolPolicy: 'redirect-to-https'
           GrpcConfig:
             Enabled: false
@@ -77,7 +77,7 @@ Resources:
           Items: []
         Enabled: true
         Aliases:
-          - 'cv.molnarbence.dev'
+          - 'cv2.molnarbence.dev'
         IPV6Enabled: true
         WebACLId: ''
         HttpVersion: 'http2'
