@@ -146,6 +146,7 @@ jobs:
       - build
       - deploy-deploy-role
       - deploy-cloudfront
+      - deploy-bucket
     runs-on: ubuntu-latest
     steps:
       - name: Download build artifact
