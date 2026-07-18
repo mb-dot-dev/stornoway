@@ -15,6 +15,9 @@ Parameters:
   CloudFrontDistributionArn:
     Type: String
     Description: 'The ARN of the CloudFront distribution to be invalidated after static content deployment.'
+  SubjectClaim:
+    Type: String
+    Description: 'The subject claim for the OIDC token from GitHub Actions. This should be in the format repo:<owner>/<repo>:<ref>.'
 
 Outputs:
   StaticContentDeployRoleArn:
@@ -37,7 +40,7 @@ Resources:
               StringEquals:
                 'token.actions.githubusercontent.com:aud': 'sts.amazonaws.com'
               StringLike:
-                'token.actions.githubusercontent.com:sub': 'repo:mb-dot-dev@287293968/stornoway@1061329177:*'
+                'token.actions.githubusercontent.com:sub': !Ref SubjectClaim
       Policies:
         - PolicyName: 's3-read-write'
           PolicyDocument:

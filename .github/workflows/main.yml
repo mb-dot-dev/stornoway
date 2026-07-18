@@ -21,11 +21,13 @@ jobs:
     outputs:
       project_name: ${{ steps.vars.outputs.project_name }}
       domain_name: ${{ steps.vars.outputs.domain_name }}
+      subject_claim: ${{ steps.vars.outputs.subject_claim }}
     steps:
       - id: vars
         run: |
           echo "project_name=${{ env.PROJECT_NAME }}" >> "$GITHUB_OUTPUT"
           echo "domain_name=${{ env.DOMAIN_NAME }}" >> "$GITHUB_OUTPUT"
+          echo "subject_claim=repo:${{ github.repository_owner }}@${{ github.repository_owner_id }}/stornoway@${{ github.repository_id }}:*" >> "$GITHUB_OUTPUT"
 
   build:
     runs-on: ubuntu-latest
@@ -124,7 +126,8 @@ jobs:
         ProjectName=${{ needs.prepare.outputs.project_name }},
         RoleName=${{ needs.prepare.outputs.project_name }}-deploy-static-content,
         DomainName=${{ needs.prepare.outputs.domain_name }},
-        CloudFrontDistributionArn=${{ fromJSON(needs.deploy-cloudfront.outputs.stack-outputs-json).CloudFrontDistributionArn }}
+        CloudFrontDistributionArn=${{ fromJSON(needs.deploy-cloudfront.outputs.stack-outputs-json).CloudFrontDistributionArn }},
+        SubjectClaim=${{ needs.prepare.outputs.subject_claim }}
  
   upsert-cloudflare:
     name: Upsert Cloudflare DNS Records
