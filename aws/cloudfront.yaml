@@ -35,7 +35,7 @@ Resources:
             CookieBehavior: 'none'
           EnableAcceptEncodingGzip: true
         DefaultTTL: 86400
-        Name: 'Managed-CachingOptimized'
+        Name: !Sub '${ProjectName}-CachingOptimized'
 
   CloudFrontDistribution:
     UpdateReplacePolicy: 'Delete'
