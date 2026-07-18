@@ -139,7 +139,20 @@ jobs:
       parameter-overrides: >-
         DomainName=${{ needs.prepare.outputs.domain_name }},
         CloudFrontDistributionDomainName=${{ fromJSON(needs.deploy-cloudfront.outputs.stack-outputs-json).CloudFrontDistributionDomainName }}
-    
+
+  upsert-cloudflare:
+    name: Upsert Cloudflare DNS Records
+    needs:
+      - prepare
+      - cfn-lint
+      - deploy-cloudfront
+    uses: mb-dot-dev/reusable-workflows/.github/workflows/upsert-cloudflare-cname.yaml@main
+    secrets: inherit
+    with:
+      zone: ${{ secrets.CLOUDFLARE_ZONE_ID }}
+      token: ${{ secrets.CLOUDFLARE_TOKEN }}
+      record-name: ${{ needs.prepare.outputs.domain_name }}
+      record-content: ${{ fromJSON(needs.deploy-cloudfront.outputs.stack-outputs-json).CloudFrontDistributionDomainName }}
 
   # infra:
   #   if: github.event_name == 'push'
