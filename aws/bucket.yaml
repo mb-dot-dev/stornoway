@@ -3,10 +3,12 @@ AWSTemplateFormatVersion: '2010-09-09'
 Description: 'S3 bucket for Stornoway website'
 
 Parameters:
+  ProjectName:
+    Type: String
+    Description: 'The name of the project, used for naming resources'
   DomainName:
     Type: String
     Description: 'The domain name and the S3 bucket name at the same time'
-    Default: 'cv2.molnarbence.dev'
 
 Outputs:
   BucketArn:
@@ -36,6 +38,11 @@ Resources:
           - BucketKeyEnabled: true
             ServerSideEncryptionByDefault:
               SSEAlgorithm: 'AES256'
+      Tags:
+        - Key: 'Project'
+          Value: !Ref ProjectName
+        - Key: 'Name'
+          Value: !Ref DomainName
 
   WebsiteBucketPolicy:
     UpdateReplacePolicy: 'Delete'
