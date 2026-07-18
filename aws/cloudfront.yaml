@@ -21,6 +21,9 @@ Outputs:
   CloudFrontDistributionArn:
     Description: 'The ARN of the CloudFront distribution'
     Value: !Sub 'arn:aws:cloudfront::${AWS::AccountId}:distribution/${CloudFrontDistribution}'
+  CloudFrontDistributionDomainName:
+    Description: 'The domain name of the CloudFront distribution'
+    Value: !GetAtt CloudFrontDistribution.DomainName
 
 Resources:
   CloudFrontCachePolicy:
