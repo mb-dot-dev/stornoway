@@ -18,6 +18,9 @@ Outputs:
   CloudFrontDistributionId:
     Description: 'The ID of the CloudFront distribution'
     Value: !Ref CloudFrontDistribution
+  CloudFrontDistributionArn:
+    Description: 'The ARN of the CloudFront distribution'
+    Value: !Sub 'arn:aws:cloudfront::${AWS::AccountId}:distribution/${CloudFrontDistribution}'
 
 Resources:
   CloudFrontCachePolicy:

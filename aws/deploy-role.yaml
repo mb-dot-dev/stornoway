@@ -1,0 +1,64 @@
+---
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'IAM role for GitHub Actions to deploy static content to S3 and invalidate CloudFront cache'
+
+Parameters:
+  ProjectName:
+    Type: String
+    Description: 'The name of the project to which this application belongs.'
+  RoleName:
+    Type: String
+    Description: 'The name of the IAM role to be created for GitHub Actions.'
+  DomainName:
+    Type: String
+    Description: 'The domain name and the S3 bucket name at the same time.'
+  CloudFrontDistributionArn:
+    Type: String
+    Description: 'The ARN of the CloudFront distribution to be invalidated after static content deployment.'
+
+Resources:
+  StaticContentDeployRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      RoleName: !Ref RoleName
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Action: 'sts:AssumeRoleWithWebIdentity'
+            Effect: 'Allow'
+            Principal:
+              Federated: !Sub 'arn:aws:iam::${AWS::AccountId}:oidc-provider/token.actions.githubusercontent.com'
+            Condition:
+              StringEquals:
+                'token.actions.githubusercontent.com:aud': 'sts.amazonaws.com'
+              StringLike:
+                'token.actions.githubusercontent.com:sub': 'repo:mb-dot-dev@287293968/stornoway@1061329177:*'
+      Policies:
+        - PolicyName: 's3-read-write'
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: 'Allow'
+                Action:
+                  - 's3:GetObject'
+                  - 's3:ListBucket'
+                  - 's3:PutObject'
+                  - 's3:DeleteObject'
+                Resource:
+                  - !Sub 'arn:aws:s3:::${DomainName}'
+                  - !Sub 'arn:aws:s3:::${DomainName}/*'
+        - PolicyName: 'cloudfront-invalidate'
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: 'Allow'
+                Action:
+                  - 'cloudfront:CreateInvalidation'
+                Resource:
+                  - !Ref CloudFrontDistributionArn
+      Tags:
+        - Key: Project
+          Value: !Ref ProjectName
+        - Key: Name
+          Value: !Ref RoleName
+  

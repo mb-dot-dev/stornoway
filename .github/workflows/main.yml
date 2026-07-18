@@ -105,6 +105,24 @@ jobs:
       parameter-overrides: >-
         ProjectName=${{ needs.prepare.outputs.project_name }},
         DomainName=${{ needs.prepare.outputs.domain_name }}
+
+  deploy-deploy-role:
+    name: Deploy IAM Role for GitHub Actions
+    needs:
+      - prepare
+      - cfn-lint
+      - deploy-cloudfront
+    uses: mb-dot-dev/reusable-workflows/.github/workflows/deploy-cloudformation.yaml@main
+    secrets: inherit
+    with:
+      stack-name: ${{ needs.prepare.outputs.project_name }}-deploy-role
+      template: aws/deploy-role.yaml
+      project: ${{ needs.prepare.outputs.project_name }}
+      parameter-overrides: >-
+        ProjectName=${{ needs.prepare.outputs.project_name }},
+        RoleName=${{ needs.prepare.outputs.project_name }}-deploy-static-content,
+        DomainName=${{ needs.prepare.outputs.domain_name }},
+        CloudFrontDistributionArn=${{ fromJSON(needs.deploy-cloudfront.outputs.stack-outputs-json).CloudFrontDistributionArn }}
  
 
   # infra:
