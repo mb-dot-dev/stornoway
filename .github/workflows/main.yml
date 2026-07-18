@@ -147,12 +147,12 @@ jobs:
       - cfn-lint
       - deploy-cloudfront
     uses: mb-dot-dev/reusable-workflows/.github/workflows/upsert-cloudflare-cname.yaml@main
-    secrets: inherit
     with:
-      zone: ${{ secrets.CLOUDFLARE_ZONE_ID }}
-      token: ${{ secrets.CLOUDFLARE_TOKEN }}
       record-name: ${{ needs.prepare.outputs.domain_name }}
       record-content: ${{ fromJSON(needs.deploy-cloudfront.outputs.stack-outputs-json).CloudFrontDistributionDomainName }}
+    secrets:
+      zone: ${{ secrets.CLOUDFLARE_ZONE_ID }}
+      token: ${{ secrets.CLOUDFLARE_TOKEN }}
 
   # infra:
   #   if: github.event_name == 'push'
