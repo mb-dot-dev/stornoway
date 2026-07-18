@@ -20,6 +20,9 @@ Outputs:
   CloudFrontDistributionId:
     Description: 'The ID of the CloudFront distribution'
     Value: !Ref CloudFrontDistribution
+  StaticContentDeployRoleArn:
+    Description: 'The ARN of the role to be assumed by GitHub Actions for deploying static content'
+    Value: !GetAtt StaticContentDeployRole.Arn
 
 Resources:
   CloudFrontDistribution:
@@ -210,8 +213,3 @@ Resources:
                   - 'cloudfront:CreateInvalidation'
                 Resource:
                   - !Sub 'arn:aws:cloudfront::${AWS::AccountId}:distribution/${CloudFrontDistribution}'
-
-Outputs:
-  StaticContentDeployRoleArn:
-    Description: 'The ARN of the role to be assumed by GitHub Actions for deploying static content'
-    Value: !GetAtt StaticContentDeployRole.Arn
