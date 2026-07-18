@@ -9,6 +9,10 @@ Parameters:
   DomainName:
     Type: String
     Description: 'The domain name and the S3 bucket name at the same time'
+  BucketDomainName:
+    Type: String
+    Description: 'The domain name of the S3 bucket, used for the CloudFront origin'
+
   CertificateArn:
     Type: AWS::SSM::Parameter::Value<String>
     Description: 'The ARN of the ACM certificate for the domain, stored in SSM Parameter'
@@ -60,12 +64,12 @@ Resources:
         Comment: ''
         DefaultRootObject: ''
         Origins:
-          - Id: !Sub '${DomainName}.s3.eu-central-1.amazonaws.com'
+          - Id: !Ref BucketDomainName
             ConnectionTimeout: 10
             OriginAccessControlId: ''
             ConnectionAttempts: 3
             OriginCustomHeaders: []
-            DomainName: !Sub '${DomainName}.s3-website.eu-central-1.amazonaws.com'
+            DomainName: !Ref BucketDomainName
             OriginShield:
               Enabled: false
             OriginPath: ''
@@ -91,7 +95,7 @@ Resources:
           Compress: true
           FunctionAssociations: []
           LambdaFunctionAssociations: []
-          TargetOriginId: !Sub '${DomainName}.s3.eu-central-1.amazonaws.com'
+          TargetOriginId: !Ref BucketDomainName
           ViewerProtocolPolicy: 'redirect-to-https'
           GrpcConfig:
             Enabled: false

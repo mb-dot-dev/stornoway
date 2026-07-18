@@ -96,6 +96,7 @@ jobs:
     needs:
       - prepare
       - cfn-lint
+      - deploy-bucket
     uses: mb-dot-dev/reusable-workflows/.github/workflows/deploy-cloudformation.yaml@main
     secrets: inherit
     with:
@@ -104,7 +105,8 @@ jobs:
       project: ${{ needs.prepare.outputs.project_name }}
       parameter-overrides: >-
         ProjectName=${{ needs.prepare.outputs.project_name }},
-        DomainName=${{ needs.prepare.outputs.domain_name }}
+        DomainName=${{ needs.prepare.outputs.domain_name }},
+        BucketDomainName=${{ fromJSON(needs.deploy-bucket.outputs.stack-outputs-json).BucketDomainName }}
 
   deploy-deploy-role:
     name: Deploy IAM Role for GitHub Actions
