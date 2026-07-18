@@ -10,7 +10,23 @@ permissions:
   id-token: write # REQUIRED for OIDC
   contents: read
 
+env:
+  PROJECT_NAME: 'stornoway'
+  DOMAIN_NAME: 'cv2.molnarbence.dev'
+
 jobs:
+  prepare:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    outputs:
+      project_name: ${{ steps.vars.outputs.project_name }}
+      domain_name: ${{ steps.vars.outputs.domain_name }}
+    steps:
+      - id: vars
+        run: |
+          echo "project_name=${{ env.PROJECT_NAME }}" >> "$GITHUB_OUTPUT"
+          echo "domain_name=${{ env.DOMAIN_NAME }}" >> "$GITHUB_OUTPUT"
+
   build:
     runs-on: ubuntu-latest
 
@@ -18,7 +34,7 @@ jobs:
       - uses: actions/checkout@v7
       - name: Use Bun
         uses: oven-sh/setup-bun@v2
-      - name: Install depencies
+      - name: Install dependencies
         run: bun install
       - name: Check format
         run: bun format:check
@@ -34,63 +50,63 @@ jobs:
           name: build
           path: dist
 
-  infra:
-    if: github.event_name == 'push'
-    runs-on: ubuntu-latest
+  # infra:
+  #   if: github.event_name == 'push'
+  #   runs-on: ubuntu-latest
 
-    outputs:
-      static-content-deploy-role-arn: ${{ steps.set-output.outputs.role_arn }}
-      cloudfront-distribution-id: ${{ steps.set-output.outputs.cloudfront_distribution_id }}
+  #   outputs:
+  #     static-content-deploy-role-arn: ${{ steps.set-output.outputs.role_arn }}
+  #     cloudfront-distribution-id: ${{ steps.set-output.outputs.cloudfront_distribution_id }}
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v7
-      - name: Setup Cloud Formation Linter with Latest Version
-        uses: scottbrenner/cfn-lint-action@v2
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v7
+  #     - name: Setup Cloud Formation Linter with Latest Version
+  #       uses: scottbrenner/cfn-lint-action@v2
 
-      - name: Print the Cloud Formation Linter Version & run Linter.
-        run: |
-          cfn-lint --version
-          cfn-lint -t ./aws/stornoway.yml
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v6
-        with:
-          role-to-assume: ${{ secrets.DEPLOY_ROLE_ARN }}
-          aws-region: eu-central-1
+  #     - name: Print the Cloud Formation Linter Version & run Linter.
+  #       run: |
+  #         cfn-lint --version
+  #         cfn-lint -t ./aws/stornoway.yml
+  #     - name: Configure AWS Credentials
+  #       uses: aws-actions/configure-aws-credentials@v6
+  #       with:
+  #         role-to-assume: ${{ secrets.DEPLOY_ROLE_ARN }}
+  #         aws-region: eu-central-1
 
-      - name: Deploy CloudFormation stack
-        run: |
-          aws cloudformation deploy \
-            --template-file ./aws/stornoway.yml \
-            --stack-name stornoway \
-            --capabilities CAPABILITY_NAMED_IAM \
-            --parameter-overrides DomainName=cv2.molnarbence.dev
+  #     - name: Deploy CloudFormation stack
+  #       run: |
+  #         aws cloudformation deploy \
+  #           --template-file ./aws/stornoway.yml \
+  #           --stack-name stornoway \
+  #           --capabilities CAPABILITY_NAMED_IAM \
+  #           --parameter-overrides DomainName=cv2.molnarbence.dev
 
-      - name: Set output variable
-        id: set-output
-        run: |
-          echo "role_arn=$(aws cloudformation describe-stacks --stack-name stornoway --query "Stacks[0].Outputs[?OutputKey=='StaticContentDeployRoleArn'].OutputValue" --output text)" >> $GITHUB_OUTPUT
-          echo "cloudfront_distribution_id=$(aws cloudformation describe-stacks --stack-name stornoway --query "Stacks[0].Outputs[?OutputKey=='CloudFrontDistributionId'].OutputValue" --output text)" >> $GITHUB_OUTPUT
+  #     - name: Set output variable
+  #       id: set-output
+  #       run: |
+  #         echo "role_arn=$(aws cloudformation describe-stacks --stack-name stornoway --query "Stacks[0].Outputs[?OutputKey=='StaticContentDeployRoleArn'].OutputValue" --output text)" >> $GITHUB_OUTPUT
+  #         echo "cloudfront_distribution_id=$(aws cloudformation describe-stacks --stack-name stornoway --query "Stacks[0].Outputs[?OutputKey=='CloudFrontDistributionId'].OutputValue" --output text)" >> $GITHUB_OUTPUT
 
-  upload-to-s3:
-    if: github.event_name == 'push'
-    needs:
-      - build
-      - infra
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download build artifact
-        uses: actions/download-artifact@v8
-        with:
-          name: build
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v6
-        with:
-          role-to-assume: ${{ needs.infra.outputs.static-content-deploy-role-arn }}
-          aws-region: us-east-1
+  # upload-to-s3:
+  #   if: github.event_name == 'push'
+  #   needs:
+  #     - build
+  #     - infra
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Download build artifact
+  #       uses: actions/download-artifact@v8
+  #       with:
+  #         name: build
+  #     - name: Configure AWS Credentials
+  #       uses: aws-actions/configure-aws-credentials@v6
+  #       with:
+  #         role-to-assume: ${{ needs.infra.outputs.static-content-deploy-role-arn }}
+  #         aws-region: us-east-1
 
-      - name: Deploy static site to S3 bucket
-        run: aws s3 sync ./ s3://cv2.molnarbence.dev --delete
+  #     - name: Deploy static site to S3 bucket
+  #       run: aws s3 sync ./ s3://cv2.molnarbence.dev --delete
 
-      - name: Invalidate cache
-        run: aws cloudfront create-invalidation --distribution-id ${{ needs.infra.outputs.cloudfront-distribution-id }} --paths "/*"
+  #     - name: Invalidate cache
+  #       run: aws cloudfront create-invalidation --distribution-id ${{ needs.infra.outputs.cloudfront-distribution-id }} --paths "/*"

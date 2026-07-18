@@ -1,0 +1,53 @@
+---
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'S3 bucket for Stornoway website'
+
+Parameters:
+  DomainName:
+    Type: String
+    Description: 'The domain name and the S3 bucket name at the same time'
+    Default: 'cv2.molnarbence.dev'
+
+Outputs:
+  BucketArn:
+    Description: 'The ARN of the S3 bucket'
+    Value: !GetAtt WebsiteBucket.Arn
+
+Resources:
+  WebsiteBucket:
+    UpdateReplacePolicy: 'Delete'
+    Type: 'AWS::S3::Bucket'
+    DeletionPolicy: 'Delete'
+    Properties:
+      AbacStatus: 'Disabled'
+      WebsiteConfiguration:
+        IndexDocument: 'index.html'
+      PublicAccessBlockConfiguration:
+        RestrictPublicBuckets: false
+        IgnorePublicAcls: false
+        BlockPublicPolicy: false
+        BlockPublicAcls: false
+      BucketName: !Ref DomainName
+      OwnershipControls:
+        Rules:
+          - ObjectOwnership: 'BucketOwnerEnforced'
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - BucketKeyEnabled: true
+            ServerSideEncryptionByDefault:
+              SSEAlgorithm: 'AES256'
+
+  WebsiteBucketPolicy:
+    UpdateReplacePolicy: 'Delete'
+    Type: 'AWS::S3::BucketPolicy'
+    DeletionPolicy: 'Delete'
+    Properties:
+      Bucket: !Ref WebsiteBucket
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Resource: !Sub 'arn:aws:s3:::${DomainName}/*'
+            Action: 's3:GetObject'
+            Effect: 'Allow'
+            Principal: '*'
+            Sid: 'PublicReadGetObject'
