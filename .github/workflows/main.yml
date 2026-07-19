@@ -13,6 +13,7 @@ permissions:
 env:
   PROJECT_NAME: 'stornoway'
   DOMAIN_NAME: 'cv.molnarbence.dev'
+  CERTIFICATE_ARN_KEY: '/certificates/molnarbence.dev'
 
 jobs:
   prepare:
@@ -22,12 +23,14 @@ jobs:
       project_name: ${{ steps.vars.outputs.project_name }}
       domain_name: ${{ steps.vars.outputs.domain_name }}
       subject_claim: ${{ steps.vars.outputs.subject_claim }}
+      certificate_arn_key: ${{ steps.vars.outputs.certificate_arn_key }}
     steps:
       - id: vars
         run: |
           echo "project_name=${{ env.PROJECT_NAME }}" >> "$GITHUB_OUTPUT"
           echo "domain_name=${{ env.DOMAIN_NAME }}" >> "$GITHUB_OUTPUT"
           echo "subject_claim=repo:${{ github.repository_owner }}@${{ github.repository_owner_id }}/stornoway@${{ github.repository_id }}:*" >> "$GITHUB_OUTPUT"
+          echo "certificate_arn_key=${{ env.CERTIFICATE_ARN_KEY }}" >> "$GITHUB_OUTPUT"
 
   build:
     runs-on: ubuntu-latest
@@ -108,7 +111,8 @@ jobs:
       parameter-overrides: >-
         ProjectName=${{ needs.prepare.outputs.project_name }},
         DomainName=${{ needs.prepare.outputs.domain_name }},
-        BucketDomainName=${{ fromJSON(needs.deploy-bucket.outputs.stack-outputs-json).BucketDomainName }}
+        BucketDomainName=${{ fromJSON(needs.deploy-bucket.outputs.stack-outputs-json).BucketDomainName }},
+        CertificateArn=${{ needs.prepare.outputs.certificate_arn_key }}
 
   deploy-deploy-role:
     name: Deploy IAM Role for GitHub Actions

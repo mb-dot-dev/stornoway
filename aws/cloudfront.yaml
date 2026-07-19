@@ -12,11 +12,9 @@ Parameters:
   BucketDomainName:
     Type: String
     Description: 'The domain name of the S3 bucket, used for the CloudFront origin'
-
   CertificateArn:
     Type: AWS::SSM::Parameter::Value<String>
     Description: 'The ARN of the ACM certificate for the domain, stored in SSM Parameter'
-    Default: '/certificates/molnarbence.dev'
   
 Outputs:
   CloudFrontDistributionId:
