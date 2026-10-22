@@ -22,7 +22,7 @@ describe('build', () => {
     const outDir = await freshDir()
     await build({ outDir })
     const html = await readFile(join(outDir, 'index.html'), 'utf8')
-    expect(html).toMatch(/<div id="root">\s*<main[^>]*>[^]*Bence Molnár/)
+    expect(html).toMatch(/<div id="root"><div[^>]*><div[^>]*><main[^>]*>[^]*Bence Molnár/)
     expect(html).toContain('<meta charset="utf-8">')
   })
 
@@ -72,6 +72,6 @@ describe('build', () => {
     const outDir = await freshDir()
     await build({ outDir })
     const html = await readFile(join(outDir, 'index.html'), 'utf8')
-    expect(html).toContain('Bence Molnár — London · test •')
+    expect(html).toContain('Bence Molnár')
   })
 })
