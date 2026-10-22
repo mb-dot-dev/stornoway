@@ -66,7 +66,7 @@ describe('build', () => {
 
   test('works from another cwd', async () => {
     const outDir = await freshDir();
-    const proc = Bun.spawn(['bun', join(import.meta.dir, 'build.ts')], {
+    const proc = Bun.spawn([process.execPath, join(import.meta.dir, 'build.ts')], {
       cwd: tmpdir(),
       env: { ...process.env, BUILD_OUT_DIR: outDir },
       stdout: 'pipe',
@@ -75,6 +75,16 @@ describe('build', () => {
     const code = await proc.exited;
     expect(code).toBe(0);
     expect(existsSync(join(outDir, 'index.html'))).toBe(true);
+  });
+
+  test('inlines the AWS icon as a data URL, with no filesystem paths', async () => {
+    const outDir = await freshDir();
+    await build({ outDir });
+    const html = await readFile(join(outDir, 'index.html'), 'utf8');
+    const srcs = [...html.matchAll(/<img\b[^>]*?\bsrc="([^"]*)"/g)].map((m) => m[1]!);
+    expect(srcs.length).toBeGreaterThan(0);
+    for (const src of srcs) expect(src.startsWith('data:image/svg+xml,')).toBe(true);
+    expect(html).not.toContain(import.meta.dir);
   });
 
   test('preserves non-ascii text', async () => {

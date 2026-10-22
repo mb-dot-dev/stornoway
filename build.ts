@@ -3,22 +3,7 @@ import { cp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { join, relative } from 'node:path';
 import { renderToString } from 'react-dom/server';
 import tailwind from 'bun-plugin-tailwind';
-
-// Inline SVGs as data URLs, in both the client bundle and the prerender, so the
-// server-rendered <img src> is byte-identical to what the client renders.
-const svgDataUrl: Bun.BunPlugin = {
-  name: 'svg-data-url',
-  setup(build) {
-    build.onLoad({ filter: /\.svg$/ }, async ({ path }) => {
-      const svg = await readFile(path, 'utf8');
-      return {
-        contents: `export default ${JSON.stringify(`data:image/svg+xml,${encodeURIComponent(svg)}`)}`,
-        loader: 'js',
-      };
-    });
-  },
-};
-Bun.plugin(svgDataUrl);
+import { svgDataUrl } from './svg-plugin'; // also registers the loader for the prerender below
 
 const root = import.meta.dir;
 
@@ -46,7 +31,7 @@ export async function build(options: { outDir?: string } = {}): Promise<void> {
   const js = result.outputs.filter((o) => o.kind === 'entry-point').map((o) => urlOf(o.path));
   const css = result.outputs.filter((o) => o.path.endsWith('.css')).map((o) => urlOf(o.path));
 
-  const { default: App } = await import('./src/App'); // after Bun.plugin(svgDataUrl) is registered
+  const { default: App } = await import('./src/App');
   const markup = renderToString(createElement(StrictMode, null, createElement(App)));
   const tags = [
     ...css.map((href) => `<link rel="stylesheet" href="${href}">`),

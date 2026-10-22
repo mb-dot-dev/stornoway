@@ -3,6 +3,7 @@ import { join } from 'node:path';
 const root = join(import.meta.dir, 'dist');
 
 const server = Bun.serve({
+  hostname: 'localhost',
   async fetch(req) {
     const { pathname } = new URL(req.url);
     const file = Bun.file(join(root, pathname === '/' ? 'index.html' : pathname));
