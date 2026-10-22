@@ -11,7 +11,7 @@ const skills = ['.NET (C#)', 'Python', 'Node.js', 'Apache Spark', 'AWS', 'GitHub
 const experiences = [
   {
     company: 'Skyscanner Ltd',
-    period: '2019 — Present',
+    period: '2019 — 2026',
     location: 'London, UK',
     projects: [
       {
