@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, test } from 'bun:test';
 import { existsSync } from 'node:fs';
-import { mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
+import { mkdir, mkdtemp, readdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { build } from './build';
@@ -38,6 +38,15 @@ describe('build', () => {
       expect(m[1]).toMatch(/[-.][a-z0-9]{6,}\.(js|css)$/);
       expect(existsSync(join(outDir, m[1]!))).toBe(true);
     }
+  });
+
+  test('bundles React in production mode', async () => {
+    const outDir = await freshDir();
+    await build({ outDir });
+    const file = (await readdir(outDir)).find((f) => f.endsWith('.js'))!;
+    const js = await readFile(join(outDir, file), 'utf8');
+    expect(js).not.toContain('Download the React DevTools');
+    expect(js.length).toBeLessThan(300_000);
   });
 
   test('copies public files', async () => {

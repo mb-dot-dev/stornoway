@@ -33,6 +33,7 @@ export async function build(options: { outDir?: string } = {}): Promise<void> {
     entrypoints: [join(root, 'src/index.tsx')],
     outdir: outDir,
     minify: true,
+    define: { 'process.env.NODE_ENV': '"production"' },
     naming: '[name]-[hash].[ext]',
     publicPath: '/',
     plugins: [tailwind, svgDataUrl],
