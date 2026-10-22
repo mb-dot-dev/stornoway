@@ -1,5 +1,5 @@
-import { Fragment } from 'react'
-import awsLogo from './assets/aws.svg'
+import { Fragment } from 'react';
+import awsLogo from './assets/aws.svg';
 
 const name = 'Bence Molnár';
 const location = 'London, UK';
@@ -121,22 +121,90 @@ export default function App() {
             <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">{name}</h1>
             <div className="text-sm text-gray-500 dark:text-gray-400 flex flex-wrap gap-x-4 gap-y-1 justify-center">
               <span className="inline-flex items-center gap-1">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-4 h-4" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.5-7.5 10.5-7.5 10.5S4.5 18 4.5 10.5a7.5 7.5 0 1115 0z" /></svg>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  className="w-4 h-4"
+                  aria-hidden="true"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M19.5 10.5c0 7.5-7.5 10.5-7.5 10.5S4.5 18 4.5 10.5a7.5 7.5 0 1115 0z"
+                  />
+                </svg>
                 <span>{location}</span>
               </span>
               <span>•</span>
-              <a href={`mailto:${email}`} className="hover:underline inline-flex items-center gap-1 transition-colors duration-150 hover:text-blue-700 dark:hover:text-blue-300">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-4 h-4" aria-hidden="true"><path strokeLinecap="round" strokeLinejoin="round" d="M21.75 7.5l-8.486 5.657a3 3 0 01-3.528 0L1.25 7.5m20.5 0A2.25 2.25 0 0019.5 5.25h-15A2.25 2.25 0 002.25 7.5v9A2.25 2.25 0 004.5 18.75h15a2.25 2.25 0 002.25-2.25v-9z" /></svg>
+              <a
+                href={`mailto:${email}`}
+                className="hover:underline inline-flex items-center gap-1 transition-colors duration-150 hover:text-blue-700 dark:hover:text-blue-300"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  className="w-4 h-4"
+                  aria-hidden="true"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M21.75 7.5l-8.486 5.657a3 3 0 01-3.528 0L1.25 7.5m20.5 0A2.25 2.25 0 0019.5 5.25h-15A2.25 2.25 0 002.25 7.5v9A2.25 2.25 0 004.5 18.75h15a2.25 2.25 0 002.25-2.25v-9z"
+                  />
+                </svg>
                 <span>{email}</span>
               </a>
               <span>•</span>
-              <a href={github.url} target="_blank" rel="noopener" className="hover:underline inline-flex items-center gap-1 transition-colors duration-150 hover:text-blue-700 dark:hover:text-blue-300" aria-label="GitHub profile">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4" aria-hidden="true"><path fillRule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.483 0-.237-.009-.866-.013-1.7-2.782.604-3.369-1.342-3.369-1.342-.454-1.155-1.11-1.463-1.11-1.463-.908-.62.069-.607.069-.607 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.091-.646.35-1.087.636-1.337-2.221-.253-4.555-1.112-4.555-4.948 0-1.092.39-1.986 1.029-2.685-.103-.253-.446-1.272.098-2.65 0 0 .84-.269 2.75 1.026A9.564 9.564 0 0 1 12 6.844c.85.004 1.705.115 2.504.337 1.909-1.295 2.748-1.026 2.748-1.026.546 1.378.203 2.397.1 2.65.64.699 1.028 1.593 1.028 2.685 0 3.845-2.337 4.692-4.566 4.94.359.31.678.922.678 1.859 0 1.342-.012 2.424-.012 2.754 0 .268.18.58.688.481A10.004 10.004 0 0 0 22 12c0-5.523-4.477-10-10-10Z" clipRule="evenodd" /></svg>
+              <a
+                href={github.url}
+                target="_blank"
+                rel="noopener"
+                className="hover:underline inline-flex items-center gap-1 transition-colors duration-150 hover:text-blue-700 dark:hover:text-blue-300"
+                aria-label="GitHub profile"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  className="w-4 h-4"
+                  aria-hidden="true"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.483 0-.237-.009-.866-.013-1.7-2.782.604-3.369-1.342-3.369-1.342-.454-1.155-1.11-1.463-1.11-1.463-.908-.62.069-.607.069-.607 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.091-.646.35-1.087.636-1.337-2.221-.253-4.555-1.112-4.555-4.948 0-1.092.39-1.986 1.029-2.685-.103-.253-.446-1.272.098-2.65 0 0 .84-.269 2.75 1.026A9.564 9.564 0 0 1 12 6.844c.85.004 1.705.115 2.504.337 1.909-1.295 2.748-1.026 2.748-1.026.546 1.378.203 2.397.1 2.65.64.699 1.028 1.593 1.028 2.685 0 3.845-2.337 4.692-4.566 4.94.359.31.678.922.678 1.859 0 1.342-.012 2.424-.012 2.754 0 .268.18.58.688.481A10.004 10.004 0 0 0 22 12c0-5.523-4.477-10-10-10Z"
+                    clipRule="evenodd"
+                  />
+                </svg>
                 <span>{`/${github.handle}`}</span>
               </a>
               <span>•</span>
-              <a href={githubOrg.url} target="_blank" rel="noopener" className="hover:underline inline-flex items-center gap-1 transition-colors duration-150 hover:text-blue-700 dark:hover:text-blue-300" aria-label="GitHub organisation">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4" aria-hidden="true"><path fillRule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.483 0-.237-.009-.866-.013-1.7-2.782.604-3.369-1.342-3.369-1.342-.454-1.155-1.11-1.463-1.11-1.463-.908-.62.069-.607.069-.607 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.091-.646.35-1.087.636-1.337-2.221-.253-4.555-1.112-4.555-4.948 0-1.092.39-1.986 1.029-2.685-.103-.253-.446-1.272.098-2.65 0 0 .84-.269 2.75 1.026A9.564 9.564 0 0 1 12 6.844c.85.004 1.705.115 2.504.337 1.909-1.295 2.748-1.026 2.748-1.026.546 1.378.203 2.397.1 2.65.64.699 1.028 1.593 1.028 2.685 0 3.845-2.337 4.692-4.566 4.94.359.31.678.922.678 1.859 0 1.342-.012 2.424-.012 2.754 0 .268.18.58.688.481A10.004 10.004 0 0 0 22 12c0-5.523-4.477-10-10-10Z" clipRule="evenodd" /></svg>
+              <a
+                href={githubOrg.url}
+                target="_blank"
+                rel="noopener"
+                className="hover:underline inline-flex items-center gap-1 transition-colors duration-150 hover:text-blue-700 dark:hover:text-blue-300"
+                aria-label="GitHub organisation"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  className="w-4 h-4"
+                  aria-hidden="true"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.483 0-.237-.009-.866-.013-1.7-2.782.604-3.369-1.342-3.369-1.342-.454-1.155-1.11-1.463-1.11-1.463-.908-.62.069-.607.069-.607 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.091-.646.35-1.087.636-1.337-2.221-.253-4.555-1.112-4.555-4.948 0-1.092.39-1.986 1.029-2.685-.103-.253-.446-1.272.098-2.65 0 0 .84-.269 2.75 1.026A9.564 9.564 0 0 1 12 6.844c.85.004 1.705.115 2.504.337 1.909-1.295 2.748-1.026 2.748-1.026.546 1.378.203 2.397.1 2.65.64.699 1.028 1.593 1.028 2.685 0 3.845-2.337 4.692-4.566 4.94.359.31.678.922.678 1.859 0 1.342-.012 2.424-.012 2.754 0 .268.18.58.688.481A10.004 10.004 0 0 0 22 12c0-5.523-4.477-10-10-10Z"
+                    clipRule="evenodd"
+                  />
+                </svg>
                 <span>{`/${githubOrg.handle}`}</span>
               </a>
             </div>
@@ -152,7 +220,10 @@ export default function App() {
             <h2 className="text-xl font-semibold">Experience</h2>
             <div className="relative grid grid-cols-[1fr_5rem] gap-x-6 gap-y-12">
               {/* Right-hand vertical timeline line spanning all rows */}
-              <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-px bg-gray-200 dark:bg-gray-800" aria-hidden="true"></div>
+              <div
+                className="pointer-events-none absolute right-0 top-0 bottom-0 w-px bg-gray-200 dark:bg-gray-800"
+                aria-hidden="true"
+              ></div>
               {experiences.map((exp, i) => (
                 <Fragment key={i}>
                   {/* Left column: content */}
@@ -190,7 +261,9 @@ export default function App() {
                       className="absolute right-0 top-2.5 h-2 w-2 rounded-full bg-gray-400 dark:bg-gray-500 ring-2 ring-white dark:ring-neutral-900 translate-x-1/2"
                       aria-hidden="true"
                     ></span>
-                    <span className="absolute right-4 top-1 text-xs text-gray-400 dark:text-gray-500 select-none">{exp.period}</span>
+                    <span className="absolute right-4 top-1 text-xs text-gray-400 dark:text-gray-500 select-none">
+                      {exp.period}
+                    </span>
                   </div>
                 </Fragment>
               ))}
@@ -229,7 +302,10 @@ export default function App() {
           <footer className="pt-8 mt-10 border-t border-gray-200 dark:border-gray-800">
             <p className="text-center text-sm text-gray-500 dark:text-gray-400 flex items-center justify-center gap-1">
               {' Built with '}
-              <a href="https://react.dev" className="hover:text-blue-700 dark:hover:text-blue-300 transition-colors duration-150">
+              <a
+                href="https://react.dev"
+                className="hover:text-blue-700 dark:hover:text-blue-300 transition-colors duration-150"
+              >
                 React
               </a>
               {' | hosted on '}
@@ -239,5 +315,5 @@ export default function App() {
         </main>
       </div>
     </div>
-  )
+  );
 }

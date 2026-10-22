@@ -15,7 +15,7 @@ Parameters:
   CertificateArn:
     Type: AWS::SSM::Parameter::Value<String>
     Description: 'The ARN of the ACM certificate for the domain, stored in SSM Parameter'
-  
+
 Outputs:
   CloudFrontDistributionId:
     Description: 'The ID of the CloudFront distribution'

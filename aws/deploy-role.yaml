@@ -69,4 +69,3 @@ Resources:
           Value: !Ref ProjectName
         - Key: Name
           Value: !Ref RoleName
-  

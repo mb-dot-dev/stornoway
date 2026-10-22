@@ -54,7 +54,7 @@ jobs:
         with:
           name: build
           path: dist
-  
+
   cfn-lint:
     name: CloudFormation Lint
     runs-on: ubuntu-latest
@@ -132,7 +132,7 @@ jobs:
         DomainName=${{ needs.prepare.outputs.domain_name }},
         CloudFrontDistributionArn=${{ fromJSON(needs.deploy-cloudfront.outputs.stack-outputs-json).CloudFrontDistributionArn }},
         SubjectClaim=${{ needs.prepare.outputs.subject_claim }}
- 
+
   upsert-cloudflare:
     name: Upsert Cloudflare DNS Records
     needs:
