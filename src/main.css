@@ -1,0 +1,53 @@
+@import 'tailwindcss';
+
+/* Global light/dark color scheme and sensible defaults without @apply */
+:root {
+  color-scheme: light dark;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #ffffff; /* white */
+  color: #0f172a; /* slate-900-ish */
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #030712; /* gray-950-ish */
+    color: #f1f5f9; /* slate-100-ish */
+  }
+}
+
+a {
+  color: #2563eb; /* blue-600 */
+  text-underline-offset: 2px;
+}
+
+@media (prefers-color-scheme: dark) {
+  a {
+    color: #60a5fa; /* blue-400 */
+  }
+}
+
+hr {
+  border-color: #e5e7eb; /* gray-200 */
+}
+@media (prefers-color-scheme: dark) {
+  hr {
+    border-color: #1f2937; /* gray-800 */
+  }
+}
+
+::selection {
+  background-color: #bfdbfe; /* blue-200 */
+  color: #0f172a; /* dark text for contrast */
+}
+@media (prefers-color-scheme: dark) {
+  ::selection {
+    background-color: #1e40af; /* blue-800-ish */
+    color: #ffffff;
+  }
+}

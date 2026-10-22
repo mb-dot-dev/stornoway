@@ -1,31 +1,23 @@
 {
-  "name": "nuxt-app",
+  "name": "stornoway",
   "type": "module",
   "private": true,
   "scripts": {
-    "build": "nuxt build",
-    "dev": "nuxt dev",
-    "generate": "nuxt generate",
-    "preview": "nuxt preview",
-    "postinstall": "nuxt prepare",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
-    "format:check": "prettier --check app",
-    "format": "prettier --write app",
-    "test": "vitest"
+    "dev": "bun ./src/index.html",
+    "build": "bun build.ts",
+    "preview": "bun preview.ts",
+    "test": "bun test"
   },
   "dependencies": {
-    "@nuxt/eslint": "^1.17.0",
-    "@nuxt/image": "^2.1.0",
-    "@tailwindcss/vite": "^4.3.3",
-    "autoprefixer": "^10.6.1",
-    "eslint-config-prettier": "^10.1.8",
-    "nuxt": "^4.5.2",
-    "postcss": "^8.5.28",
-    "prettier": "^3.9.9",
-    "tailwindcss": "^4.3.3",
-    "vitest": "^5.0.1",
-    "vue": "^3.5.43",
-    "vue-router": "^5.3.1"
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "tailwindcss": "^4.3.3"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.4.3",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "bun-plugin-tailwind": "^0.1.2",
+    "typescript": "^5.0.0"
   }
 }
