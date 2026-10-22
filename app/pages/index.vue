@@ -4,6 +4,7 @@ const name = 'Bence Molnár';
 const location = 'London, UK';
 const email = 'hiring@molnarbence.dev';
 const github = { handle: 'molnarbence', url: 'https://github.com/molnarbence' };
+const githubOrg = { handle: 'mb-dot-dev', url: 'https://github.com/mb-dot-dev' };
 const summary = `boyscout, amateur drone photographer, interested in astronomy, gastronomy and home automation`;
 const skills = ['.NET (C#)', 'Python', 'Node.js', 'Apache Spark', 'AWS', 'GitHub Actions'];
 
@@ -179,6 +180,29 @@ const education = [
             />
           </svg>
           <span>/{{ github.handle }}</span>
+        </a>
+        <span>•</span>
+        <a
+          :href="githubOrg.url"
+          target="_blank"
+          rel="noopener"
+          class="hover:underline inline-flex items-center gap-1 transition-colors duration-150 hover:text-blue-700 dark:hover:text-blue-300"
+          aria-label="GitHub organisation"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            class="w-4 h-4"
+            aria-hidden="true"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.483 0-.237-.009-.866-.013-1.7-2.782.604-3.369-1.342-3.369-1.342-.454-1.155-1.11-1.463-1.11-1.463-.908-.62.069-.607.069-.607 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.091-.646.35-1.087.636-1.337-2.221-.253-4.555-1.112-4.555-4.948 0-1.092.39-1.986 1.029-2.685-.103-.253-.446-1.272.098-2.65 0 0 .84-.269 2.75 1.026A9.564 9.564 0 0 1 12 6.844c.85.004 1.705.115 2.504.337 1.909-1.295 2.748-1.026 2.748-1.026.546 1.378.203 2.397.1 2.65.64.699 1.028 1.593 1.028 2.685 0 3.845-2.337 4.692-4.566 4.94.359.31.678.922.678 1.859 0 1.342-.012 2.424-.012 2.754 0 .268.18.58.688.481A10.004 10.004 0 0 0 22 12c0-5.523-4.477-10-10-10Z"
+              clip-rule="evenodd"
+            />
+          </svg>
+          <span>/{{ githubOrg.handle }}</span>
         </a>
       </div>
     </header>
