@@ -3,7 +3,7 @@
   "configVersion": 0,
   "workspaces": {
     "": {
-      "name": "nuxt-app",
+      "name": "stornoway",
       "dependencies": {
         "react": "^19.3.1",
         "react-dom": "^19.3.1",
