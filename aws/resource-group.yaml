@@ -18,7 +18,7 @@ Resources:
     Type: AWS::ResourceGroups::Group
     Properties:
       Name: !Ref ProjectName
-      Description: 'Application resource group managed via CloudFormation and visible in AWS Resource Groups.'
+      Description: "Application resource group managed via CloudFormation and visible in AWS Resource Groups."
       ResourceQuery:
         Type: TAG_FILTERS_1_0
         Query:

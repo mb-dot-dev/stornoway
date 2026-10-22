@@ -1,7 +1,16 @@
 [fmt]
 singleQuote = true
 printWidth = 120
-ignorePatterns = ["app/", "docs/", ".superpowers/", "nuxt.config.ts", "tailwind.config.js", "bun.lock"]
+ignorePatterns = [
+  "aws/",
+  ".github/",
+  "app/",
+  "docs/",
+  ".superpowers/",
+  "nuxt.config.ts",
+  "tailwind.config.js",
+  "bun.lock",
+]
 
 [lint]
 ignorePatterns = ["app/", "docs/", ".superpowers/", "nuxt.config.ts", "tailwind.config.js"]
