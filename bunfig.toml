@@ -1,0 +1,16 @@
+[fmt]
+singleQuote = true
+printWidth = 120
+ignorePatterns = ["aws/", ".github/", "docs/", ".superpowers/", "bun.lock"]
+
+[lint]
+ignorePatterns = ["docs/", ".superpowers/"]
+
+[serve.static]
+plugins = ["bun-plugin-tailwind"]
+
+[install]
+peer = false
+
+[test]
+preload = ["./svg-plugin.ts"]
