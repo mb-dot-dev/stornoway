@@ -1,75 +1,25 @@
-# Nuxt Minimal Starter
+# stornoway
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+The source of my online CV, published at <https://cv.molnarbence.dev>. It is a React single page that is prerendered to static HTML at build time and hosted on AWS (see `aws/`).
 
-## Setup
-
-Make sure to install dependencies:
+## Commands
 
 ```bash
-# npm
-npm install
-
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
+bun install       # install dependencies
+bun run dev       # dev server with hot reload (bun ./src/index.html)
+bun run build     # prerender the site into dist/
+bun run preview   # serve dist/ locally
+bun test          # run the tests
+bun lint          # lint
+bun fmt           # format (use `bun fmt --check` to only verify)
 ```
 
-## Development Server
+## How the build works
 
-Start the development server on `http://localhost:3000`:
+`build.ts` bundles `src/` with `Bun.build` (Tailwind via `bun-plugin-tailwind`), then renders the `App` component to a string with `react-dom/server` and injects it into the generated `index.html`. The result in `dist/` is plain static HTML, CSS and JS that works without JavaScript and hydrates in the browser when it is available.
 
-```bash
-# npm
-npm run dev
+## Bun canary pin
 
-# pnpm
-pnpm dev
+`bun fmt` and `bun lint` are not in a stable Bun release yet, so CI uses `bun-version: canary` in `oven-sh/setup-bun` and `.bun-version` contains `canary`. `setup-bun` can only resolve release tags and the moving `canary` tag, so a specific canary build cannot be pinned. The trade-off is that a canary update can change behaviour or break CI without any change in this repo.
 
-# yarn
-yarn dev
-
-# bun
-bun run dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+Go back to a pinned stable version (in both `.bun-version` and the workflow) once a stable Bun release ships `bun fmt` and `bun lint`.
