@@ -1,12 +1,13 @@
 import awsLogo from './assets/aws.svg';
 
 const name = 'Bence Molnár';
+const jobTitle = 'Senior Software Engineer';
 const location = 'Budapest, Hungary';
 const email = 'hiring@molnarbence.dev';
 const github = { handle: 'molnarbence', url: 'https://github.com/molnarbence' };
 const githubOrg = { handle: 'mb-dot-dev', url: 'https://github.com/mb-dot-dev' };
 const summary =
-  'Senior Software Engineer with 15+ years in .NET (C#) and Python on AWS. ' +
+  'Senior Software Engineer with 15+ years in .NET (C#) and 3 years in Python, building on AWS. ' +
   'At Skyscanner I owned the SOx-compliant finance systems behind £40M+ a month of partner billing, ' +
   'and cut audit-logging costs to ~$3 a week. ' +
   'Earlier, at Agoda, I shipped a home page redesign that grew revenue by 7%.';
@@ -52,7 +53,16 @@ export const skillGroups = [
   { name: 'Frameworks & data', items: ['.NET', 'Node.js', 'Apache Spark', 'Kafka'] },
   {
     name: 'Cloud & infra',
-    items: ['AWS (Batch, Lambda, S3, CloudWatch, Firehose, CloudFormation)', 'Kubernetes', 'GitHub Actions'],
+    items: [
+      'AWS Batch',
+      'AWS Lambda',
+      'AWS S3',
+      'AWS CloudWatch',
+      'AWS Firehose',
+      'AWS CloudFormation',
+      'Kubernetes',
+      'GitHub Actions',
+    ],
   },
   { name: 'Databases', items: ['SQL Server', 'PostgreSQL', 'MySQL'] },
   { name: 'Domain', items: ['Financial systems', 'SOx compliance', 'Audit & controls'] },
@@ -201,10 +211,6 @@ function Period({ period }: { period: string }) {
 
 const linkClass = 'hover:underline inline-flex items-center gap-1';
 
-function Separator() {
-  return <span aria-hidden="true">•</span>;
-}
-
 function GitHubLink({ handle, url, kind }: { handle: string; url: string; kind: string }) {
   return (
     <a href={url} target="_blank" rel="noopener" className={linkClass}>
@@ -227,21 +233,27 @@ function GitHubLink({ handle, url, kind }: { handle: string; url: string; kind: 
   );
 }
 
+const sideHeading = 'text-xs font-semibold uppercase tracking-[0.12em] text-accent';
+const mainHeading = 'text-2xl font-semibold text-accent';
+
 export default function App() {
   return (
-    <div className="mx-auto max-w-5xl lg:max-w-6xl px-4 sm:px-6 lg:px-10 xl:px-14 2xl:px-20 py-8 print:max-w-none print:p-0">
-      <div className="w-full space-y-10 rounded-xl border border-border bg-raised shadow-sm p-6 sm:p-8 lg:p-10 xl:p-12 print:border-0 print:shadow-none print:p-0">
-        <header className="text-center space-y-2">
-          <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-strong">{name}</h1>
-          <div className="text-sm text-muted flex flex-wrap gap-x-4 gap-y-1 justify-center">
-            <span className="inline-flex items-center gap-1">
+    <div className="mx-auto max-w-5xl lg:max-w-6xl px-4 sm:px-6 lg:px-8 py-10 lg:py-14 print:max-w-none print:p-0">
+      <div className="grid gap-x-14 gap-y-10 lg:grid-cols-[20rem_minmax(0,1fr)] lg:grid-rows-[auto_1fr] print:block print:space-y-8">
+        <header className="space-y-6 lg:col-start-1 lg:row-start-1">
+          <div className="space-y-2">
+            <h1 className="text-4xl lg:text-5xl font-bold tracking-tight leading-none text-strong">{name}</h1>
+            <p className="text-lg font-semibold text-accent">{jobTitle}</p>
+          </div>
+          <ul className="space-y-2.5 text-[15px]">
+            <li className="flex items-center gap-2.5">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="1.5"
-                className="w-4 h-4"
+                className="w-4 h-4 shrink-0"
                 aria-hidden="true"
               >
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -252,43 +264,44 @@ export default function App() {
                 />
               </svg>
               <span>{location}</span>
-            </span>
-            <Separator />
-            <a href={`mailto:${email}`} className={linkClass}>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                className="w-4 h-4"
-                aria-hidden="true"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M21.75 7.5l-8.486 5.657a3 3 0 01-3.528 0L1.25 7.5m20.5 0A2.25 2.25 0 0019.5 5.25h-15A2.25 2.25 0 002.25 7.5v9A2.25 2.25 0 004.5 18.75h15a2.25 2.25 0 002.25-2.25v-9z"
-                />
-              </svg>
-              <span>{email}</span>
-            </a>
-            <Separator />
-            <GitHubLink {...github} kind="profile" />
-            <Separator />
-            <GitHubLink {...githubOrg} kind="organisation" />
-          </div>
+            </li>
+            <li>
+              <a href={`mailto:${email}`} className={`${linkClass} gap-2.5`}>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  className="w-4 h-4 shrink-0"
+                  aria-hidden="true"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M21.75 7.5l-8.486 5.657a3 3 0 01-3.528 0L1.25 7.5m20.5 0A2.25 2.25 0 0019.5 5.25h-15A2.25 2.25 0 002.25 7.5v9A2.25 2.25 0 004.5 18.75h15a2.25 2.25 0 002.25-2.25v-9z"
+                  />
+                </svg>
+                <span>{email}</span>
+              </a>
+            </li>
+            <li>
+              <GitHubLink {...github} kind="profile" />
+            </li>
+            <li>
+              <GitHubLink {...githubOrg} kind="organisation" />
+            </li>
+          </ul>
         </header>
 
-        <main className="space-y-10">
+        <main className="space-y-12 lg:col-start-2 lg:row-start-1 lg:row-span-2">
           {/* Summary */}
-          <section className="space-y-3 text-center">
-            <p className="mx-auto max-w-3xl lg:max-w-4xl">{summary}</p>
-          </section>
+          <p className="text-xl leading-relaxed text-strong">{summary}</p>
 
           {/* Highlights */}
-          <section className="space-y-3">
-            <h2 className="text-xl font-semibold text-accent">Highlights</h2>
-            <ul className="list-disc pl-5 space-y-2 marker:text-accent">
+          <section className="space-y-4">
+            <h2 className={mainHeading}>Highlights</h2>
+            <ul className="list-disc pl-5 space-y-2.5 marker:text-accent">
               {highlights.map((h) => (
                 <li key={h.lead}>
                   <strong className="font-semibold text-strong">{h.lead}</strong>
@@ -299,60 +312,57 @@ export default function App() {
           </section>
 
           {/* Experience */}
-          <section className="space-y-4">
-            <h2 className="text-xl font-semibold text-accent">Experience</h2>
-            <div className="space-y-12">
-              {experiences.map((exp) => (
-                <article key={exp.company} className="space-y-3 print:break-inside-avoid-page">
-                  <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1">
-                    <h3 className="font-medium">
-                      <span>{exp.title}</span>
-                      <span className="text-muted">{' · '}</span>
-                      <span className="text-strong">{exp.company}</span>
-                      <span className="text-muted">{` · ${exp.location}`}</span>
-                    </h3>
-                    <div className="shrink-0 text-sm text-muted">
-                      <Period period={exp.period} />
-                    </div>
+          <section className="space-y-8">
+            <h2 className={mainHeading}>Experience</h2>
+            {experiences.map((exp) => (
+              <article
+                key={exp.company}
+                className="space-y-4 pb-8 border-b border-border last:border-b-0 last:pb-0 print:break-inside-avoid-page"
+              >
+                <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+                  <h3 className="text-lg font-semibold text-strong">
+                    {exp.company}
+                    <span className="font-normal text-muted">{` · ${exp.title}`}</span>
+                  </h3>
+                  <p className="text-sm text-muted">
+                    <Period period={exp.period} />
+                    {` · ${exp.location}`}
+                  </p>
+                </div>
+                {exp.projects.map((p) => (
+                  <div key={p.name} className="space-y-1.5 print:break-inside-avoid">
+                    <h4 className="font-semibold text-strong">{p.name}</h4>
+                    <p>{p.description}</p>
+                    {'tech' in p && p.tech?.length ? (
+                      <ul className="flex flex-wrap gap-1.5 pt-1" aria-label="Technologies">
+                        {p.tech.map((tech) => (
+                          <li key={tech} className="px-2 py-0.5 text-xs rounded-full border border-border">
+                            {tech}
+                          </li>
+                        ))}
+                      </ul>
+                    ) : null}
                   </div>
-                  <div className="space-y-3">
-                    {exp.projects.map((p) => (
-                      <div key={p.name} className="print:break-inside-avoid">
-                        <h4 className="font-medium">{p.name}</h4>
-                        <p>{p.description}</p>
-                        {'tech' in p && p.tech?.length ? (
-                          <ul className="flex items-center gap-2 flex-wrap" aria-label="Technologies">
-                            {p.tech.map((tech) => (
-                              <li
-                                key={tech}
-                                className="px-2 py-1 text-xs rounded-full bg-chip text-on-chip print:border print:border-border"
-                              >
-                                {tech}
-                              </li>
-                            ))}
-                          </ul>
-                        ) : null}
-                      </div>
-                    ))}
-                  </div>
-                </article>
-              ))}
-            </div>
+                ))}
+              </article>
+            ))}
           </section>
+        </main>
 
+        <aside className="space-y-9 self-start lg:col-start-1 lg:row-start-2">
           {/* Skills */}
-          <section className="space-y-3 print:break-inside-avoid">
-            <h2 className="text-xl font-semibold text-accent">Skills</h2>
-            <dl className="space-y-3">
+          <section className="space-y-4 print:break-inside-avoid">
+            <h2 className={sideHeading}>Skills</h2>
+            <dl className="space-y-4">
               {skillGroups.map((g) => (
-                <div key={g.name} className="flex flex-col sm:flex-row sm:items-baseline gap-2">
-                  <dt className="sm:w-40 shrink-0 text-sm font-medium text-muted">{g.name}</dt>
+                <div key={g.name} className="space-y-2">
+                  <dt className="text-sm font-medium text-muted">{g.name}</dt>
                   <dd>
-                    <ul className="flex flex-wrap gap-2">
+                    <ul className="flex flex-wrap gap-1.5">
                       {g.items.map((s) => (
                         <li
                           key={s}
-                          className="px-3 py-1 rounded-full bg-chip text-on-chip text-sm print:border print:border-border"
+                          className="px-2.5 py-0.5 rounded-full bg-chip text-on-chip text-[13px] font-medium print:border print:border-border"
                         >
                           {s}
                         </li>
@@ -364,38 +374,36 @@ export default function App() {
             </dl>
           </section>
 
+          {/* Languages */}
+          <section className="space-y-2.5">
+            <h2 className={sideHeading}>Languages</h2>
+            <p>{languages.map((l) => `${l.name} (${l.level})`).join(', ')}</p>
+          </section>
+
           {/* Education */}
-          <section className="space-y-3">
-            <h2 className="text-xl font-semibold text-accent">Education</h2>
-            <ul className="space-y-2">
+          <section className="space-y-2.5">
+            <h2 className={sideHeading}>Education</h2>
+            <ul className="space-y-3">
               {education.map((e) => (
-                <li key={e.school} className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1">
-                  <div className="font-medium">
-                    {`${e.degree} — `}
-                    <span className="text-strong">{e.school}</span>
-                  </div>
-                  <div className="text-sm text-muted">
+                <li key={e.school}>
+                  <p className="font-semibold text-strong">{e.school}</p>
+                  <p className="text-sm">{e.degree}</p>
+                  <p className="text-sm text-muted">
                     <Period period={e.period} />
-                  </div>
+                  </p>
                 </li>
               ))}
             </ul>
           </section>
 
-          {/* Languages */}
-          <section className="space-y-3">
-            <h2 className="text-xl font-semibold text-accent">Languages</h2>
-            <p>{languages.map((l) => `${l.name} (${l.level})`).join(', ')}</p>
-          </section>
-
           {/* Interests */}
-          <section className="space-y-3">
-            <h2 className="text-xl font-semibold text-accent">Interests</h2>
+          <section className="space-y-2.5">
+            <h2 className={sideHeading}>Interests</h2>
             <p>{interests.join(', ')}</p>
           </section>
-        </main>
+        </aside>
 
-        <footer className="pt-8 border-t border-border print:hidden">
+        <footer className="pt-8 border-t border-border lg:col-span-2 print:hidden">
           <p className="text-center text-sm text-muted flex items-center justify-center gap-1">
             {' Built with '}
             <a href="https://react.dev" className="hover:underline">
