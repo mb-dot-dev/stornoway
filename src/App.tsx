@@ -142,7 +142,7 @@ export const experiences = [
         description:
           'Led the handover of the PIX image platform from the Budapest team to Bangkok HQ. ' +
           'Then migrated the main service to cross-platform .NET Core 2.0, removing the need for Windows Server licences ' +
-          "by replacing Windows' built-in image manipulation library with open-source alternatives, " +
+          'by replacing the Windows-only System.Drawing image library with open-source alternatives, ' +
           'and moved image-upload processing onto Kafka to spread the workload.',
         tech: ['.NET', 'C#', 'Kafka', 'Cassandra'],
       },
