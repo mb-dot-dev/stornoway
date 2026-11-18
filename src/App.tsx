@@ -310,6 +310,26 @@ export default function App() {
                 <span>Homelab</span>
               </a>
             </li>
+            <li className="print:hidden">
+              <a href="/lambdas/" className={`${linkClass} gap-2`}>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  className="w-4 h-4 shrink-0"
+                  aria-hidden="true"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5"
+                  />
+                </svg>
+                <span>Lambda apps</span>
+              </a>
+            </li>
           </ul>
         </div>
       </header>

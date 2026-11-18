@@ -26,6 +26,13 @@ describe('App', () => {
     expect(html).not.toContain('href="/homelab/" target="_blank"');
   });
 
+  test('links to the Lambda apps page', () => {
+    expect(html).toMatch(
+      /<li class="[^"]*print:hidden[^"]*"><a href="\/lambdas\/" class="[^"]*">[^]*?Lambda apps<\/span><\/a><\/li>/,
+    );
+    expect(html).not.toContain('href="/lambdas/" target="_blank"');
+  });
+
   test('contains every section heading', () => {
     for (const h of ['Highlights', 'Experience', 'Skills', 'Education']) {
       expect(html).toContain(`>${h}</h2>`);

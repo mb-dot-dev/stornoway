@@ -40,7 +40,7 @@ describe('build', () => {
     const outDir = await freshDir();
     await build({ outDir });
     expect((await readdir(outDir)).filter((f) => f.endsWith('.js'))).toEqual([]);
-    for (const page of ['index.html', '404.html', 'homelab/index.html']) {
+    for (const page of ['index.html', '404.html', 'homelab/index.html', 'lambdas/index.html']) {
       const html = await readFile(join(outDir, page), 'utf8');
       const scripts = [...html.matchAll(/<script\b[^>]*>/g)].map((m) => m[0]);
       expect(scripts.every((tag) => tag.includes('type="application/ld+json"'))).toBe(true);
@@ -50,7 +50,7 @@ describe('build', () => {
   test('has no inline style attributes (the CSP forbids them)', async () => {
     const outDir = await freshDir();
     await build({ outDir });
-    for (const page of ['index.html', 'homelab/index.html']) {
+    for (const page of ['index.html', 'homelab/index.html', 'lambdas/index.html']) {
       const html = await readFile(join(outDir, page), 'utf8');
       expect(html).not.toMatch(/\sstyle="/);
     }
@@ -67,6 +67,18 @@ describe('build', () => {
     expect(existsSync(join(outDir, styles[0]![1]!))).toBe(true);
     expect(html).toContain('href="/favicon.svg"');
     expect(html).toContain('<link rel="canonical" href="https://cv.molnarbence.dev/homelab/"');
+  });
+
+  test('writes the lambdas page', async () => {
+    const outDir = await freshDir();
+    await build({ outDir });
+    const html = await readFile(join(outDir, 'lambdas/index.html'), 'utf8');
+    expect(html).toMatch(/<h1[^>]*>AWS Lambda reference apps<\/h1>/);
+    for (const name of ['Helsinki', 'Stockholm', 'Warsaw', 'Oslo', 'Copenhagen']) expect(html).toContain(name);
+    const styles = [...html.matchAll(/<link rel="stylesheet"[^>]*href="(\/[^"]+\.css)"/g)];
+    expect(styles).toHaveLength(1);
+    expect(existsSync(join(outDir, styles[0]![1]!))).toBe(true);
+    expect(html).toContain('<link rel="canonical" href="https://cv.molnarbence.dev/lambdas/"');
   });
 
   test('writes a styled 404 page', async () => {

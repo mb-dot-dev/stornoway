@@ -33,9 +33,11 @@ export async function build(options: { outDir?: string } = {}): Promise<void> {
 
   const { default: App } = await import('./src/App');
   const { default: Homelab } = await import('./src/Homelab');
+  const { default: Lambdas } = await import('./src/Lambdas');
   const pages = [
     { template: 'src/index.html', component: App, out: 'index.html' },
     { template: 'src/homelab.html', component: Homelab, out: 'homelab/index.html' },
+    { template: 'src/lambdas.html', component: Lambdas, out: 'lambdas/index.html' },
   ];
   for (const page of pages) {
     const markup = renderToString(createElement(StrictMode, null, createElement(page.component)));
