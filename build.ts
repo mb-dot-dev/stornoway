@@ -1,6 +1,6 @@
 import { StrictMode, createElement } from 'react';
 import { cp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
-import { join, relative } from 'node:path';
+import { dirname, join, relative } from 'node:path';
 import { renderToString } from 'react-dom/server';
 import tailwind from 'bun-plugin-tailwind';
 import './svg-plugin'; // registers the .svg loader for the prerender below
@@ -32,13 +32,22 @@ export async function build(options: { outDir?: string } = {}): Promise<void> {
   const styles = css.map((href) => `<link rel="stylesheet" href="${href}">`).join('\n    ');
 
   const { default: App } = await import('./src/App');
-  const markup = renderToString(createElement(StrictMode, null, createElement(App)));
-  const template = await readFile(join(root, 'src/index.html'), 'utf8');
-  const html = template
-    .replace(/\s*<script type="module" src="\.\/index\.tsx"><\/script>/, '') // dev-server entry only
-    .replace('<div id="root"></div>', () => `<div id="root">${markup}</div>`)
-    .replace('</head>', () => `  ${styles}\n  </head>`);
-  await writeFile(join(outDir, 'index.html'), html);
+  const { default: Homelab } = await import('./src/Homelab');
+  const pages = [
+    { template: 'src/index.html', component: App, out: 'index.html' },
+    { template: 'src/homelab.html', component: Homelab, out: 'homelab/index.html' },
+  ];
+  for (const page of pages) {
+    const markup = renderToString(createElement(StrictMode, null, createElement(page.component)));
+    const template = await readFile(join(root, page.template), 'utf8');
+    const html = template
+      .replace(/\s*<script type="module" src="\.\/[\w-]+\.tsx"><\/script>/, '') // dev-server entry only
+      .replace('<div id="root"></div>', () => `<div id="root">${markup}</div>`)
+      .replace('</head>', () => `  ${styles}\n  </head>`);
+    const out = join(outDir, page.out);
+    await mkdir(dirname(out), { recursive: true });
+    await writeFile(out, html);
+  }
 
   const notFound = await readFile(join(root, 'src/404.html'), 'utf8');
   await writeFile(

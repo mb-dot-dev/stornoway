@@ -19,6 +19,13 @@ describe('App', () => {
     }
   });
 
+  test('links to the homelab page', () => {
+    expect(html).toMatch(
+      /<li class="[^"]*print:hidden[^"]*"><a href="\/homelab\/" class="[^"]*">[^]*?Homelab<\/span><\/a><\/li>/,
+    );
+    expect(html).not.toContain('href="/homelab/" target="_blank"');
+  });
+
   test('contains every section heading', () => {
     for (const h of ['Highlights', 'Experience', 'Skills', 'Education']) {
       expect(html).toContain(`>${h}</h2>`);

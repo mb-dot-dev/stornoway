@@ -3,7 +3,7 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "dev": "bun ./src/index.html",
+    "dev": "bun ./src/index.html ./src/homelab.html",
     "build": "bun build.ts",
     "preview": "bun preview.ts",
     "test": "bun test"
