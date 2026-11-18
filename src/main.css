@@ -1,53 +1,43 @@
 @import 'tailwindcss';
 
-/* Global light/dark color scheme and sensible defaults without @apply */
-:root {
-  color-scheme: light dark;
-}
+/* Dark mode only on screen, so printing always uses the light palette. */
+@custom-variant dark (@media screen and (prefers-color-scheme: dark));
 
-html {
-  scroll-behavior: smooth;
-}
+/*
+ * Globals live in the base layer: unlayered rules would beat every Tailwind
+ * utility (which sit in @layer utilities), e.g. hover:text-* on links.
+ */
+@layer base {
+  :root {
+    color-scheme: light dark;
+  }
 
-body {
-  background-color: #ffffff; /* white */
-  color: #0f172a; /* slate-900-ish */
-}
-
-@media (prefers-color-scheme: dark) {
   body {
-    background-color: #030712; /* gray-950-ish */
-    color: #f1f5f9; /* slate-100-ish */
+    background-color: light-dark(#ffffff, var(--color-gray-950));
+    color: light-dark(var(--color-slate-900), var(--color-slate-100));
   }
-}
 
-a {
-  color: #2563eb; /* blue-600 */
-  text-underline-offset: 2px;
-}
-
-@media (prefers-color-scheme: dark) {
   a {
-    color: #60a5fa; /* blue-400 */
+    color: light-dark(var(--color-blue-600), var(--color-blue-400));
+    text-underline-offset: 2px;
   }
-}
 
-hr {
-  border-color: #e5e7eb; /* gray-200 */
-}
-@media (prefers-color-scheme: dark) {
   hr {
-    border-color: #1f2937; /* gray-800 */
+    border-color: light-dark(var(--color-gray-200), var(--color-gray-800));
+  }
+
+  ::selection {
+    background-color: light-dark(var(--color-blue-200), var(--color-blue-800));
+    color: light-dark(var(--color-slate-900), #ffffff);
+  }
+
+  @media print {
+    :root {
+      color-scheme: light;
+    }
   }
 }
 
-::selection {
-  background-color: #bfdbfe; /* blue-200 */
-  color: #0f172a; /* dark text for contrast */
-}
-@media (prefers-color-scheme: dark) {
-  ::selection {
-    background-color: #1e40af; /* blue-800-ish */
-    color: #ffffff;
-  }
+@page {
+  margin: 1.5cm;
 }

@@ -22,31 +22,44 @@ describe('build', () => {
     const outDir = await freshDir();
     await build({ outDir });
     const html = await readFile(join(outDir, 'index.html'), 'utf8');
-    expect(html).toMatch(/<div id="root"><div[^>]*><div[^>]*><main[^>]*>[^]*Bence Molnár/);
+    expect(html).toMatch(/<div id="root"><div[^>]*><div[^>]*><header[^>]*>[^]*Bence Molnár/);
     expect(html).toMatch(/<meta charset="utf-8"\s*\/?>/);
   });
 
-  test('links hashed assets with root-absolute urls', async () => {
+  test('links a hashed stylesheet with a root-absolute url', async () => {
     const outDir = await freshDir();
     await build({ outDir });
     const html = await readFile(join(outDir, 'index.html'), 'utf8');
-    const scripts = [...html.matchAll(/<script type="module"[^>]*src="(\/[^"]+\.js)"/g)];
     const styles = [...html.matchAll(/<link rel="stylesheet"[^>]*href="(\/[^"]+\.css)"/g)];
-    expect(scripts).toHaveLength(1);
     expect(styles).toHaveLength(1);
-    for (const m of [scripts[0]!, styles[0]!]) {
-      expect(m[1]).toMatch(/[-.][a-z0-9]{6,}\.(js|css)$/);
-      expect(existsSync(join(outDir, m[1]!))).toBe(true);
+    expect(styles[0]![1]).toMatch(/[-.][a-z0-9]{6,}\.css$/);
+    expect(existsSync(join(outDir, styles[0]![1]!))).toBe(true);
+  });
+
+  test('ships no JavaScript', async () => {
+    const outDir = await freshDir();
+    await build({ outDir });
+    expect((await readdir(outDir)).filter((f) => f.endsWith('.js'))).toEqual([]);
+    for (const page of ['index.html', '404.html']) {
+      const html = await readFile(join(outDir, page), 'utf8');
+      const scripts = [...html.matchAll(/<script\b[^>]*>/g)].map((m) => m[0]);
+      expect(scripts.every((tag) => tag.includes('type="application/ld+json"'))).toBe(true);
     }
   });
 
-  test('bundles React in production mode', async () => {
+  test('has no inline style attributes (the CSP forbids them)', async () => {
     const outDir = await freshDir();
     await build({ outDir });
-    const file = (await readdir(outDir)).find((f) => f.endsWith('.js'))!;
-    const js = await readFile(join(outDir, file), 'utf8');
-    expect(js).not.toContain('Download the React DevTools');
-    expect(js.length).toBeLessThan(300_000);
+    const html = await readFile(join(outDir, 'index.html'), 'utf8');
+    expect(html).not.toMatch(/\sstyle="/);
+  });
+
+  test('writes a styled 404 page', async () => {
+    const outDir = await freshDir();
+    await build({ outDir });
+    const html = await readFile(join(outDir, '404.html'), 'utf8');
+    expect(html).toContain('Page not found');
+    expect(html).toMatch(/<link rel="stylesheet"[^>]*href="\/[^"]+\.css"/);
   });
 
   test('copies public files', async () => {

@@ -6,9 +6,9 @@ const html = renderToStaticMarkup(<App />);
 const count = (needle: string) => html.split(needle).length - 1;
 
 describe('App', () => {
-  test('contains name, location and email', () => {
+  test('contains name, current location and email', () => {
     expect(html).toContain('Bence Molnár');
-    expect(html).toContain('London, UK');
+    expect(html).toContain('Budapest, Hungary');
     expect(html).toContain('hiring@molnarbence.dev');
     expect(html).toContain('href="mailto:hiring@molnarbence.dev"');
   });
@@ -32,7 +32,9 @@ describe('App', () => {
       0,
     );
     expect(count('<span class="text-gray-700 dark:text-gray-200">')).toBe(experiences.length + education.length);
-    expect(count('<div class="font-medium">')).toBe(experiences.length + projects + education.length);
+    expect(count('<h3 class="font-medium">')).toBe(experiences.length);
+    expect(count('<h4 class="font-medium">')).toBe(projects);
+    expect(count('<div class="font-medium">')).toBe(education.length);
     expect(count('px-2 py-1 text-xs rounded-full')).toBe(techs);
     expect(count('px-3 py-1 rounded-full')).toBe(skills.length);
     expect(count('sm:items-baseline sm:justify-between gap-1">')).toBe(experiences.length + education.length);
@@ -43,6 +45,19 @@ describe('App', () => {
     for (const h of highlights) {
       expect(html).toContain(`${h.lead}</strong>`);
     }
+  });
+
+  test('header, main and footer are sibling landmarks', () => {
+    expect(html).toMatch(/<\/header><main[^>]*>[^]*<\/main><footer/);
+  });
+
+  test('link accessible names include their visible text', () => {
+    expect(html).not.toContain('aria-label="GitHub');
+    expect(html).toContain('<span class="sr-only">GitHub profile </span><span>/molnarbence</span>');
+  });
+
+  test('marks up periods with <time>', () => {
+    expect(html).toContain('<time dateTime="2019">2019</time> — <time dateTime="2026">2026</time>');
   });
 
   test('footer credits React', () => {

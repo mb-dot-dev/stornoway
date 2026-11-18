@@ -1,6 +1,6 @@
 # stornoway
 
-The source of my online CV, published at <https://cv.molnarbence.dev>. It is a React single page that is prerendered to static HTML at build time and hosted on AWS (see `aws/`).
+The source of my online CV, published at <https://cv.molnarbence.dev>. It is a React single page that is prerendered to static HTML and CSS at build time and hosted on AWS (see `aws/`).
 
 ## Commands
 
@@ -16,7 +16,9 @@ bun fmt           # format (use `bun fmt --check` to only verify)
 
 ## How the build works
 
-`build.ts` bundles `src/` with `Bun.build` (Tailwind via `bun-plugin-tailwind`), then renders the `App` component to a string with `react-dom/server` and injects it into the generated `index.html`. The result in `dist/` is plain static HTML, CSS and JS that works without JavaScript and hydrates in the browser when it is available.
+`build.ts` builds `src/main.css` with `Bun.build` (Tailwind via `bun-plugin-tailwind`), then renders the `App` component to a string with `react-dom/server` and injects it into `index.html`; it also writes a styled `404.html`. The page has no interactivity, so `dist/` contains only static HTML and CSS: no JavaScript is shipped. `src/index.tsx` is used only by the dev server.
+
+On deploy, the content-hashed CSS is uploaded with `Cache-Control: immutable` and everything else with `no-cache`. CloudFront adds security headers (HSTS, a strict CSP, `X-Content-Type-Options`, `Referrer-Policy` and others) through a response headers policy, so the page must not use inline `<script>` or `style` attributes.
 
 ## Bun canary pin
 
