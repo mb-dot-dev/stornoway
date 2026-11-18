@@ -168,7 +168,15 @@ jobs:
           aws-region: eu-central-1
 
       - name: Deploy static site to S3 bucket
-        run: aws s3 sync ./ s3://${{ needs.prepare.outputs.domain_name }} --delete
+        env:
+          BUCKET: s3://${{ needs.prepare.outputs.domain_name }}
+        run: |
+          # Content-hashed stylesheets never change, so they can be cached forever
+          aws s3 cp ./ "$BUCKET" --recursive --exclude '*' --include '*.css' --cache-control 'public, max-age=31536000, immutable'
+          # Everything else (HTML, favicon, robots.txt) is revalidated on every request
+          aws s3 cp ./ "$BUCKET" --recursive --exclude '*.css' --cache-control 'no-cache'
+          # Remove files that are no longer in the build (everything else was just uploaded, so nothing is re-sent)
+          aws s3 sync ./ "$BUCKET" --delete
 
       - name: Invalidate cache
         run: aws cloudfront create-invalidation --distribution-id ${{ fromJSON(needs.deploy-cloudfront.outputs.stack-outputs-json).CloudFrontDistributionId }} --paths "/*"

@@ -49,6 +49,38 @@ Resources:
         DefaultTTL: 86400
         Name: !Sub '${ProjectName}-CachingOptimized'
 
+  CloudFrontResponseHeadersPolicy:
+    Type: 'AWS::CloudFront::ResponseHeadersPolicy'
+    Properties:
+      ResponseHeadersPolicyConfig:
+        Name: !Sub '${ProjectName}-SecurityHeaders'
+        Comment: 'Security headers for a static, JavaScript-free site'
+        SecurityHeadersConfig:
+          StrictTransportSecurity:
+            AccessControlMaxAgeSec: 63072000
+            IncludeSubdomains: true
+            Preload: false
+            Override: true
+          ContentTypeOptions:
+            Override: true
+          FrameOptions:
+            FrameOption: 'DENY'
+            Override: true
+          ReferrerPolicy:
+            ReferrerPolicy: 'strict-origin-when-cross-origin'
+            Override: true
+          ContentSecurityPolicy:
+            ContentSecurityPolicy: "default-src 'none'; style-src 'self'; img-src 'self' data:; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"
+            Override: true
+        CustomHeadersConfig:
+          Items:
+            - Header: 'Permissions-Policy'
+              Value: 'camera=(), microphone=(), geolocation=()'
+              Override: true
+            - Header: 'Cross-Origin-Opener-Policy'
+              Value: 'same-origin'
+              Override: true
+
   CloudFrontDistribution:
     UpdateReplacePolicy: 'Delete'
     Type: 'AWS::CloudFront::Distribution'
@@ -77,9 +109,6 @@ Resources:
               HTTPSPort: 443
               OriginKeepaliveTimeout: 5
               OriginSSLProtocols:
-                - 'SSLv3'
-                - 'TLSv1'
-                - 'TLSv1.1'
                 - 'TLSv1.2'
               HTTPPort: 80
               OriginProtocolPolicy: 'http-only'
@@ -109,6 +138,8 @@ Resources:
           SmoothStreaming: false
           CachePolicyId:
             Ref: 'CloudFrontCachePolicy'
+          ResponseHeadersPolicyId:
+            Ref: 'CloudFrontResponseHeadersPolicy'
         Staging: false
         CustomErrorResponses: []
         ContinuousDeploymentPolicyId: ''
@@ -120,7 +151,7 @@ Resources:
           - !Ref DomainName
         IPV6Enabled: true
         WebACLId: ''
-        HttpVersion: 'http2'
+        HttpVersion: 'http2and3'
         Restrictions:
           GeoRestriction:
             Locations: []

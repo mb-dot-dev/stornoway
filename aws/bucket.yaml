@@ -27,6 +27,7 @@ Resources:
       AbacStatus: 'Disabled'
       WebsiteConfiguration:
         IndexDocument: 'index.html'
+        ErrorDocument: '404.html'
       PublicAccessBlockConfiguration:
         RestrictPublicBuckets: false
         IgnorePublicAcls: false
