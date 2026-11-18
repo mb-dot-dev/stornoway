@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'bun:test';
 import { renderToStaticMarkup } from 'react-dom/server';
-import App, { education, experiences, skills } from './App';
+import App, { education, experiences, highlights, skills } from './App';
 
 const html = renderToStaticMarkup(<App />);
 const count = (needle: string) => html.split(needle).length - 1;
@@ -20,7 +20,7 @@ describe('App', () => {
   });
 
   test('contains every section heading', () => {
-    for (const h of ['Experience', 'Skills', 'Education']) {
+    for (const h of ['Highlights', 'Experience', 'Skills', 'Education']) {
       expect(html).toContain(`>${h}</h2>`);
     }
   });
@@ -36,6 +36,13 @@ describe('App', () => {
     expect(count('px-2 py-1 text-xs rounded-full')).toBe(techs);
     expect(count('px-3 py-1 rounded-full')).toBe(skills.length);
     expect(count('sm:items-baseline sm:justify-between gap-1">')).toBe(experiences.length + education.length);
+  });
+
+  test('renders every highlight with a bold lead-in', () => {
+    expect(count('<li><strong class="font-semibold')).toBe(highlights.length);
+    for (const h of highlights) {
+      expect(html).toContain(`${h.lead}</strong>`);
+    }
   });
 
   test('footer credits React', () => {

@@ -6,10 +6,42 @@ const email = 'hiring@molnarbence.dev';
 const github = { handle: 'molnarbence', url: 'https://github.com/molnarbence' };
 const githubOrg = { handle: 'mb-dot-dev', url: 'https://github.com/mb-dot-dev' };
 const summary =
-  'Senior Software Engineer with 15+ years building backend systems in .NET (C#) and Python, most recently on AWS. ' +
-  'Spent the last 7 years at Skyscanner leading delivery of business-critical financial and SOx-compliant tooling, ' +
-  'after earlier roles at Agoda (Bangkok) and Mimecast. ' +
-  'Comfortable owning systems end to end, from design and delivery to operations, disaster recovery and audit.';
+  'Senior Software Engineer with 15+ years in .NET (C#) and Python on AWS. ' +
+  'At Skyscanner I owned the SOx-compliant finance systems behind £40M+ a month of partner billing, ' +
+  'and cut audit-logging costs to ~$3 a week. ' +
+  'Earlier, at Agoda, I shipped a home page redesign that grew revenue by 7%.';
+export const highlights = [
+  {
+    lead: 'Built the billing pipeline',
+    text:
+      " behind Skyscanner's partner invoicing: Apache Spark jobs turning 2–3M redirects a month per revenue-tracking configuration " +
+      'into £40M+ a month of billable revenue across 1,200 partners, mission-critical during the first-week-of-month billing cycle.',
+  },
+  {
+    lead: 'Grew revenue 7%',
+    text: ' with a single A/B test of the redesigned, search-led Agoda home page.',
+  },
+  {
+    lead: 'Made xe.com the single source of truth for exchange rates',
+    text: ' across all financial systems (Workday, Kyriba), eliminating conversion rate differences between them.',
+  },
+  {
+    lead: 'Replaced Splunk alerting',
+    text:
+      ' for 4 SOx-scoped production databases with an in-house system that runs for about $3 a week on AWS, ' +
+      "so Splunk could be decommissioned for this use and audit logs stayed in Skyscanner's own AWS estate.",
+  },
+  {
+    lead: 'Owned SOx compliance',
+    text:
+      ' for the finance tooling: IT general controls across ~15 repos plus 4 financial controls, ' +
+      'tightening access by applying least privilege, including separate database users for migrations and the web app.',
+  },
+  {
+    lead: 'Engineering lead for Finance:',
+    text: ' the main point of contact for the finance team, on the on-call rota, and mentor to junior engineers.',
+  },
+];
 export const languages = [
   { name: 'English', level: 'fluent' },
   { name: 'Hungarian', level: 'native' },
@@ -51,7 +83,8 @@ export const experiences = [
           'Built the billing staging pipeline: Apache Spark jobs aggregated 2–3 million redirects a month per revenue-tracking configuration ' +
           'and attributed the billable revenue to partner accounts, ready for finance to invoice. ' +
           'Integrated with the trade-credit insurer: open invoices were sent for coverage and partner credit limits were synced back to Customer records in Workday. ' +
-          'Automated loading of xe.com exchange rates into Workday and the Kyriba treasury system.',
+          'Automated loading of xe.com exchange rates into Workday and the Kyriba treasury system, ' +
+          'making xe.com the single source of truth for rates across all financial systems and eliminating conversion rate differences.',
         tech: [
           'C#',
           'Python',
@@ -70,15 +103,8 @@ export const experiences = [
         name: 'SOx control ownership',
         description:
           'SOx control owner for the finance tooling: IT general controls across ~15 repositories plus 4 financial controls. ' +
-          'Ran the quarterly control audits and user access reviews, and documented how control evidence is provided to auditors.',
-      },
-      {
-        name: 'Disaster Recovery Plan for the Financial Tools',
-        description:
-          'Designed and documented the disaster recovery plan for the finance tooling: infrastructure rebuilt from CloudFormation templates ' +
-          'with databases restored from daily snapshots. Wrote the cross-team runbook with Finance, including issuing credit notes ' +
-          'if a disaster hit the first-week-of-month billing cycle.',
-        tech: ['AWS CloudFormation', 'SQL Server', 'Postgres', 'MySQL'],
+          'Ran the quarterly control audits and user access reviews, and documented how control evidence is provided to auditors. ' +
+          'Continuously tightened access by applying least privilege, including separate database users for schema migrations and the web app.',
       },
       {
         name: 'Python application configuration facility',
@@ -99,8 +125,8 @@ export const experiences = [
       {
         name: 'Email ingestion system',
         description:
-          "Worked on the email ingestion platform that migrated new customers' existing mailbox files into Mimecast, " +
-          'a key step in onboarding new customers.',
+          "Developed and maintained the email ingestion platform that imported new customers' existing mailbox archives into Mimecast, " +
+          'a key step in customer onboarding.',
         tech: ['.NET', 'C#'],
       },
     ],
@@ -115,7 +141,9 @@ export const experiences = [
         name: 'PIX Image Platform',
         description:
           'Led the handover of the PIX image platform from the Budapest team to Bangkok HQ. ' +
-          'Then migrated the main service to cross-platform .NET Core 2.0, and moved image-upload processing onto Kafka to spread the workload.',
+          'Then migrated the main service to cross-platform .NET Core 2.0, removing the need for Windows Server licences ' +
+          "by replacing Windows' built-in image manipulation library with open-source alternatives, " +
+          'and moved image-upload processing onto Kafka to spread the workload.',
         tech: ['.NET', 'C#', 'Kafka', 'Cassandra'],
       },
       {
@@ -258,6 +286,19 @@ export default function App() {
           {/* Summary */}
           <section className="space-y-3 text-center">
             <p className="mx-auto max-w-3xl lg:max-w-4xl text-gray-700 dark:text-gray-300">{summary}</p>
+          </section>
+
+          {/* Highlights */}
+          <section className="space-y-3">
+            <h2 className="text-xl font-semibold">Highlights</h2>
+            <ul className="list-disc pl-5 space-y-2 text-gray-700 dark:text-gray-300">
+              {highlights.map((h) => (
+                <li key={h.lead}>
+                  <strong className="font-semibold text-gray-900 dark:text-gray-100">{h.lead}</strong>
+                  {h.text}
+                </li>
+              ))}
+            </ul>
           </section>
 
           {/* Experience */}
