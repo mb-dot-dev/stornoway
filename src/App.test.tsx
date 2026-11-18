@@ -31,22 +31,22 @@ describe('App', () => {
       (n, e) => n + e.projects.reduce((m, p) => m + (('tech' in p && p.tech?.length) || 0), 0),
       0,
     );
-    expect(count('<h3 class="text-lg font-semibold text-strong">')).toBe(experiences.length);
+    expect(count('<h3 class="text-[22px] font-semibold text-strong">')).toBe(experiences.length);
     expect(count('<h4 class="font-semibold text-strong">')).toBe(projects);
     expect(count('<p class="font-semibold text-strong">')).toBe(education.length);
-    expect(count('px-2 py-0.5 text-xs rounded-full')).toBe(techs);
-    expect(count('px-2.5 py-0.5 rounded-full')).toBe(skills.length);
+    expect(count('px-2.5 py-0.5 text-xs font-medium rounded-full')).toBe(techs);
+    expect(count('px-3 py-0.5 rounded-full')).toBe(skills.length);
   });
 
   test('renders every highlight with a bold lead-in', () => {
-    expect(count('<li><strong class="font-semibold')).toBe(highlights.length);
+    expect(count('<strong class="block text-[17px] leading-snug font-semibold')).toBe(highlights.length);
     for (const h of highlights) {
       expect(html).toContain(`${h.lead}</strong>`);
     }
   });
 
-  test('header, main, aside and footer are sibling landmarks', () => {
-    expect(html).toMatch(/<\/header><main[^>]*>[^]*<\/main><aside[^>]*>[^]*<\/aside><footer/);
+  test('header, main and footer are sibling landmarks', () => {
+    expect(html).toMatch(/<\/header><main[^>]*>[^]*<\/main><footer/);
   });
 
   test('link accessible names include their visible text', () => {

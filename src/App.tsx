@@ -233,20 +233,24 @@ function GitHubLink({ handle, url, kind }: { handle: string; url: string; kind: 
   );
 }
 
-const sideHeading = 'text-xs font-semibold uppercase tracking-[0.12em] text-accent';
-const mainHeading = 'text-2xl font-semibold text-accent';
+const container = 'mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 print:max-w-none print:px-0';
+const sectionHeading = 'text-2xl font-semibold text-accent';
+const subHeading = 'text-xl font-semibold text-accent';
 
 export default function App() {
   return (
-    <div className="mx-auto max-w-5xl lg:max-w-6xl px-4 sm:px-6 lg:px-8 py-10 lg:py-14 print:max-w-none print:p-0">
-      <div className="grid gap-x-14 gap-y-10 lg:grid-cols-[20rem_minmax(0,1fr)] lg:grid-rows-[auto_1fr] print:block print:space-y-8">
-        <header className="space-y-6 lg:col-start-1 lg:row-start-1">
-          <div className="space-y-2">
-            <h1 className="text-4xl lg:text-5xl font-bold tracking-tight leading-none text-strong">{name}</h1>
-            <p className="text-lg font-semibold text-accent">{jobTitle}</p>
+    <div className="min-h-screen">
+      <header className="bg-raised border-b border-border">
+        <div
+          className={`${container} py-12 lg:py-14 flex flex-wrap items-end justify-between gap-x-12 gap-y-6 print:pt-0 print:pb-6`}
+        >
+          <div className="flex-[1_1_32rem] space-y-3">
+            <p className="text-sm font-semibold uppercase tracking-[0.14em] text-accent">{jobTitle}</p>
+            <h1 className="text-5xl lg:text-6xl font-bold tracking-tight leading-none text-strong">{name}</h1>
+            <p className="pt-2 max-w-3xl text-lg text-strong">{summary}</p>
           </div>
-          <ul className="space-y-2.5 text-[15px]">
-            <li className="flex items-center gap-2.5">
+          <ul className="flex-[0_1_17rem] space-y-2 text-[15px]">
+            <li className="flex items-center gap-2">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -266,7 +270,7 @@ export default function App() {
               <span>{location}</span>
             </li>
             <li>
-              <a href={`mailto:${email}`} className={`${linkClass} gap-2.5`}>
+              <a href={`mailto:${email}`} className={`${linkClass} gap-2`}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
@@ -292,77 +296,97 @@ export default function App() {
               <GitHubLink {...githubOrg} kind="organisation" />
             </li>
           </ul>
-        </header>
+        </div>
+      </header>
 
-        <main className="space-y-12 lg:col-start-2 lg:row-start-1 lg:row-span-2">
-          {/* Summary */}
-          <p className="text-xl leading-relaxed text-strong">{summary}</p>
-
-          {/* Highlights */}
-          <section className="space-y-4">
-            <h2 className={mainHeading}>Highlights</h2>
-            <ul className="list-disc pl-5 space-y-2.5 marker:text-accent">
-              {highlights.map((h) => (
-                <li key={h.lead}>
-                  <strong className="font-semibold text-strong">{h.lead}</strong>
-                  {h.text}
-                </li>
-              ))}
-            </ul>
-          </section>
-
-          {/* Experience */}
-          <section className="space-y-8">
-            <h2 className={mainHeading}>Experience</h2>
-            {experiences.map((exp) => (
-              <article
-                key={exp.company}
-                className="space-y-4 pb-8 border-b border-border last:border-b-0 last:pb-0 print:break-inside-avoid-page"
+      <main className={`${container} py-12 lg:py-14 space-y-16 print:space-y-10`}>
+        {/* Highlights */}
+        <section className="space-y-5">
+          <h2 className={sectionHeading}>Highlights</h2>
+          <ol className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {highlights.map((h, i) => (
+              <li
+                key={h.lead}
+                className="rounded-2xl border border-border bg-raised p-5 space-y-2 print:break-inside-avoid"
               >
-                <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-                  <h3 className="text-lg font-semibold text-strong">
-                    {exp.company}
-                    <span className="font-normal text-muted">{` · ${exp.title}`}</span>
-                  </h3>
-                  <p className="text-sm text-muted">
-                    <Period period={exp.period} />
-                    {` · ${exp.location}`}
-                  </p>
-                </div>
-                {exp.projects.map((p) => (
-                  <div key={p.name} className="space-y-1.5 print:break-inside-avoid">
-                    <h4 className="font-semibold text-strong">{p.name}</h4>
-                    <p>{p.description}</p>
-                    {'tech' in p && p.tech?.length ? (
-                      <ul className="flex flex-wrap gap-1.5 pt-1" aria-label="Technologies">
-                        {p.tech.map((tech) => (
-                          <li key={tech} className="px-2 py-0.5 text-xs rounded-full border border-border">
-                            {tech}
-                          </li>
-                        ))}
-                      </ul>
-                    ) : null}
-                  </div>
-                ))}
-              </article>
+                <span aria-hidden="true" className="block text-sm text-muted">
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+                <strong className="block text-[17px] leading-snug font-semibold text-strong">{h.lead}</strong>
+                <span className="block text-[15px]">{h.text.trim()}</span>
+              </li>
             ))}
-          </section>
-        </main>
+          </ol>
+        </section>
 
-        <aside className="space-y-9 self-start lg:col-start-1 lg:row-start-2">
+        {/* Experience */}
+        <section className="space-y-7">
+          <h2 className={sectionHeading}>Experience</h2>
+          <ol>
+            {experiences.map((exp) => (
+              <li
+                key={exp.company}
+                className="grid grid-cols-[1.75rem_minmax(0,1fr)] sm:grid-cols-[11rem_1.75rem_minmax(0,1fr)] gap-x-4 sm:gap-x-5 print:break-inside-avoid-page"
+              >
+                <div className="hidden sm:flex flex-col items-end text-right pt-0.5">
+                  <span className="text-lg font-semibold text-strong">
+                    <Period period={exp.period} />
+                  </span>
+                  <span className="text-sm text-muted">{exp.location}</span>
+                </div>
+                <div aria-hidden="true" className="flex flex-col items-center">
+                  <div className="mt-2 size-3.5 shrink-0 rounded-full bg-accent ring-[5px] ring-surface" />
+                  <div className="w-0.5 flex-1 bg-border" />
+                </div>
+                <div className="pb-12 space-y-4">
+                  <div className="space-y-0.5">
+                    <h3 className="text-[22px] font-semibold text-strong">
+                      {exp.company}
+                      <span className="text-base font-normal text-muted">{` — ${exp.title}`}</span>
+                    </h3>
+                    <p className="sm:hidden text-sm text-muted">
+                      <Period period={exp.period} />
+                      {` · ${exp.location}`}
+                    </p>
+                  </div>
+                  {exp.projects.map((p) => (
+                    <div key={p.name} className="space-y-1.5 print:break-inside-avoid">
+                      <h4 className="font-semibold text-strong">{p.name}</h4>
+                      <p>{p.description}</p>
+                      {'tech' in p && p.tech?.length ? (
+                        <ul className="flex flex-wrap gap-1.5 pt-1" aria-label="Technologies">
+                          {p.tech.map((tech) => (
+                            <li
+                              key={tech}
+                              className="px-2.5 py-0.5 text-xs font-medium rounded-full bg-chip text-on-chip print:border print:border-border"
+                            >
+                              {tech}
+                            </li>
+                          ))}
+                        </ul>
+                      ) : null}
+                    </div>
+                  ))}
+                </div>
+              </li>
+            ))}
+          </ol>
+        </section>
+
+        <div className="grid gap-x-10 gap-y-10 pt-10 border-t border-border md:grid-cols-2 lg:grid-cols-4">
           {/* Skills */}
-          <section className="space-y-4 print:break-inside-avoid">
-            <h2 className={sideHeading}>Skills</h2>
-            <dl className="space-y-4">
+          <section className="space-y-4 md:col-span-2 print:break-inside-avoid">
+            <h2 className={subHeading}>Skills</h2>
+            <dl className="space-y-3">
               {skillGroups.map((g) => (
-                <div key={g.name} className="space-y-2">
-                  <dt className="text-sm font-medium text-muted">{g.name}</dt>
-                  <dd>
+                <div key={g.name} className="flex flex-wrap gap-x-3 gap-y-1.5">
+                  <dt className="w-36 shrink-0 pt-0.5 text-sm font-medium text-muted">{g.name}</dt>
+                  <dd className="flex-1 min-w-48">
                     <ul className="flex flex-wrap gap-1.5">
                       {g.items.map((s) => (
                         <li
                           key={s}
-                          className="px-2.5 py-0.5 rounded-full bg-chip text-on-chip text-[13px] font-medium print:border print:border-border"
+                          className="px-3 py-0.5 rounded-full bg-chip text-on-chip text-[13px] font-medium print:border print:border-border"
                         >
                           {s}
                         </li>
@@ -374,21 +398,15 @@ export default function App() {
             </dl>
           </section>
 
-          {/* Languages */}
-          <section className="space-y-2.5">
-            <h2 className={sideHeading}>Languages</h2>
-            <p>{languages.map((l) => `${l.name} (${l.level})`).join(', ')}</p>
-          </section>
-
           {/* Education */}
-          <section className="space-y-2.5">
-            <h2 className={sideHeading}>Education</h2>
-            <ul className="space-y-3">
+          <section className="space-y-4">
+            <h2 className={subHeading}>Education</h2>
+            <ul className="space-y-3 text-[15px]">
               {education.map((e) => (
                 <li key={e.school}>
                   <p className="font-semibold text-strong">{e.school}</p>
-                  <p className="text-sm">{e.degree}</p>
-                  <p className="text-sm text-muted">
+                  <p>{e.degree}</p>
+                  <p className="text-muted">
                     <Period period={e.period} />
                   </p>
                 </li>
@@ -396,24 +414,32 @@ export default function App() {
             </ul>
           </section>
 
-          {/* Interests */}
-          <section className="space-y-2.5">
-            <h2 className={sideHeading}>Interests</h2>
-            <p>{interests.join(', ')}</p>
-          </section>
-        </aside>
+          <div className="space-y-8">
+            {/* Languages */}
+            <section className="space-y-4">
+              <h2 className={subHeading}>Languages</h2>
+              <p className="text-[15px]">{languages.map((l) => `${l.name} (${l.level})`).join(', ')}</p>
+            </section>
 
-        <footer className="pt-8 border-t border-border lg:col-span-2 print:hidden">
-          <p className="text-center text-sm text-muted flex items-center justify-center gap-1">
-            {' Built with '}
-            <a href="https://react.dev" className="hover:underline">
-              React
-            </a>
-            {' | hosted on '}
-            <img src={awsLogo} alt="AWS" className="w-5 h-5 invert-60" />
-          </p>
-        </footer>
-      </div>
+            {/* Interests */}
+            <section className="space-y-4">
+              <h2 className={subHeading}>Interests</h2>
+              <p className="text-[15px]">{interests.join(', ')}</p>
+            </section>
+          </div>
+        </div>
+      </main>
+
+      <footer className={`${container} pb-10 print:hidden`}>
+        <p className="pt-8 border-t border-border text-center text-sm text-muted flex items-center justify-center gap-1">
+          {' Built with '}
+          <a href="https://react.dev" className="hover:underline">
+            React
+          </a>
+          {' | hosted on '}
+          <img src={awsLogo} alt="AWS" className="w-5 h-5 invert-60" />
+        </p>
+      </footer>
     </div>
   );
 }

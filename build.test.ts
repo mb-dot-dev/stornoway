@@ -22,7 +22,7 @@ describe('build', () => {
     const outDir = await freshDir();
     await build({ outDir });
     const html = await readFile(join(outDir, 'index.html'), 'utf8');
-    expect(html).toMatch(/<div id="root"><div[^>]*><div[^>]*><header[^>]*>[^]*Bence Molnár/);
+    expect(html).toMatch(/<div id="root"><div[^>]*><header[^>]*>[^]*Bence Molnár/);
     expect(html).toMatch(/<meta charset="utf-8"\s*\/?>/);
   });
 
