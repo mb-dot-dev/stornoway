@@ -66,7 +66,20 @@ describe('build', () => {
     const outDir = await freshDir();
     await build({ outDir });
     expect(existsSync(join(outDir, 'favicon.ico'))).toBe(true);
+    expect(existsSync(join(outDir, 'favicon.svg'))).toBe(true);
+    expect(existsSync(join(outDir, 'apple-touch-icon.png'))).toBe(true);
     expect(existsSync(join(outDir, 'robots.txt'))).toBe(true);
+  });
+
+  test('links the favicons', async () => {
+    const outDir = await freshDir();
+    await build({ outDir });
+    for (const page of ['index.html', '404.html']) {
+      const html = await readFile(join(outDir, page), 'utf8');
+      expect(html).toContain('href="/favicon.ico"');
+      expect(html).toContain('href="/favicon.svg"');
+      expect(html).toContain('rel="apple-touch-icon"');
+    }
   });
 
   test('removes stale files', async () => {
