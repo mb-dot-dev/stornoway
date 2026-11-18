@@ -31,7 +31,7 @@ describe('App', () => {
       (n, e) => n + e.projects.reduce((m, p) => m + (('tech' in p && p.tech?.length) || 0), 0),
       0,
     );
-    expect(count('<span class="text-gray-700 dark:text-gray-200">')).toBe(experiences.length + education.length);
+    expect(count('<span class="text-strong">')).toBe(experiences.length + education.length);
     expect(count('<h3 class="font-medium">')).toBe(experiences.length);
     expect(count('<h4 class="font-medium">')).toBe(projects);
     expect(count('<div class="font-medium">')).toBe(education.length);

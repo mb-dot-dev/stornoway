@@ -200,7 +200,7 @@ function Period({ period }: { period: string }) {
 }
 
 const linkClass =
-  'hover:underline inline-flex items-center gap-1 transition-colors duration-150 hover:text-blue-700 dark:hover:text-blue-300';
+  'hover:underline inline-flex items-center gap-1';
 
 function Separator() {
   return <span aria-hidden="true">•</span>;
@@ -231,10 +231,10 @@ function GitHubLink({ handle, url, kind }: { handle: string; url: string; kind: 
 export default function App() {
   return (
     <div className="mx-auto max-w-5xl lg:max-w-6xl px-4 sm:px-6 lg:px-10 xl:px-14 2xl:px-20 py-8 print:max-w-none print:p-0">
-      <div className="w-full space-y-10 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-neutral-900 shadow-sm p-6 sm:p-8 lg:p-10 xl:p-12 print:border-0 print:shadow-none print:p-0">
+      <div className="w-full space-y-10 rounded-xl border border-border bg-raised shadow-sm p-6 sm:p-8 lg:p-10 xl:p-12 print:border-0 print:shadow-none print:p-0">
         <header className="text-center space-y-2">
-          <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">{name}</h1>
-          <div className="text-sm text-gray-500 dark:text-gray-400 flex flex-wrap gap-x-4 gap-y-1 justify-center">
+          <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-strong">{name}</h1>
+          <div className="text-sm text-muted flex flex-wrap gap-x-4 gap-y-1 justify-center">
             <span className="inline-flex items-center gap-1">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -283,16 +283,16 @@ export default function App() {
         <main className="space-y-10">
           {/* Summary */}
           <section className="space-y-3 text-center">
-            <p className="mx-auto max-w-3xl lg:max-w-4xl text-gray-700 dark:text-gray-300">{summary}</p>
+            <p className="mx-auto max-w-3xl lg:max-w-4xl">{summary}</p>
           </section>
 
           {/* Highlights */}
           <section className="space-y-3">
-            <h2 className="text-xl font-semibold">Highlights</h2>
-            <ul className="list-disc pl-5 space-y-2 text-gray-700 dark:text-gray-300">
+            <h2 className="text-xl font-semibold text-accent">Highlights</h2>
+            <ul className="list-disc pl-5 space-y-2 marker:text-accent">
               {highlights.map((h) => (
                 <li key={h.lead}>
-                  <strong className="font-semibold text-gray-900 dark:text-gray-100">{h.lead}</strong>
+                  <strong className="font-semibold text-strong">{h.lead}</strong>
                   {h.text}
                 </li>
               ))}
@@ -301,18 +301,18 @@ export default function App() {
 
           {/* Experience */}
           <section className="space-y-4">
-            <h2 className="text-xl font-semibold">Experience</h2>
+            <h2 className="text-xl font-semibold text-accent">Experience</h2>
             <div className="space-y-12">
               {experiences.map((exp) => (
                 <article key={exp.company} className="space-y-3 print:break-inside-avoid-page">
                   <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1">
                     <h3 className="font-medium">
                       <span>{exp.title}</span>
-                      <span className="text-gray-500 dark:text-gray-400">{' · '}</span>
-                      <span className="text-gray-700 dark:text-gray-200">{exp.company}</span>
-                      <span className="text-gray-500 dark:text-gray-400">{` · ${exp.location}`}</span>
+                      <span className="text-muted">{' · '}</span>
+                      <span className="text-strong">{exp.company}</span>
+                      <span className="text-muted">{` · ${exp.location}`}</span>
                     </h3>
-                    <div className="shrink-0 text-sm text-gray-600 dark:text-gray-400">
+                    <div className="shrink-0 text-sm text-muted">
                       <Period period={exp.period} />
                     </div>
                   </div>
@@ -320,13 +320,13 @@ export default function App() {
                     {exp.projects.map((p) => (
                       <div key={p.name} className="print:break-inside-avoid">
                         <h4 className="font-medium">{p.name}</h4>
-                        <p className="text-gray-700 dark:text-gray-300">{p.description}</p>
+                        <p>{p.description}</p>
                         {'tech' in p && p.tech?.length ? (
                           <ul className="flex items-center gap-2 flex-wrap" aria-label="Technologies">
                             {p.tech.map((tech) => (
                               <li
                                 key={tech}
-                                className="px-2 py-1 text-xs rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300"
+                                className="px-2 py-1 text-xs rounded-full bg-chip text-on-chip print:border print:border-border"
                               >
                                 {tech}
                               </li>
@@ -343,15 +343,15 @@ export default function App() {
 
           {/* Skills */}
           <section className="space-y-3 print:break-inside-avoid">
-            <h2 className="text-xl font-semibold">Skills</h2>
+            <h2 className="text-xl font-semibold text-accent">Skills</h2>
             <dl className="space-y-3">
               {skillGroups.map((g) => (
                 <div key={g.name} className="flex flex-col sm:flex-row sm:items-baseline gap-2">
-                  <dt className="sm:w-40 shrink-0 text-sm font-medium text-gray-600 dark:text-gray-400">{g.name}</dt>
+                  <dt className="sm:w-40 shrink-0 text-sm font-medium text-muted">{g.name}</dt>
                   <dd>
                     <ul className="flex flex-wrap gap-2">
                       {g.items.map((s) => (
-                        <li key={s} className="px-3 py-1 rounded-full bg-gray-100 dark:bg-gray-800 text-sm">
+                        <li key={s} className="px-3 py-1 rounded-full bg-chip text-on-chip text-sm print:border print:border-border">
                           {s}
                         </li>
                       ))}
@@ -364,15 +364,15 @@ export default function App() {
 
           {/* Education */}
           <section className="space-y-3">
-            <h2 className="text-xl font-semibold">Education</h2>
+            <h2 className="text-xl font-semibold text-accent">Education</h2>
             <ul className="space-y-2">
               {education.map((e) => (
                 <li key={e.school} className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1">
                   <div className="font-medium">
                     {`${e.degree} — `}
-                    <span className="text-gray-700 dark:text-gray-200">{e.school}</span>
+                    <span className="text-strong">{e.school}</span>
                   </div>
-                  <div className="text-sm text-gray-500 dark:text-gray-400">
+                  <div className="text-sm text-muted">
                     <Period period={e.period} />
                   </div>
                 </li>
@@ -382,25 +382,25 @@ export default function App() {
 
           {/* Languages */}
           <section className="space-y-3">
-            <h2 className="text-xl font-semibold">Languages</h2>
-            <p className="text-gray-700 dark:text-gray-300">
+            <h2 className="text-xl font-semibold text-accent">Languages</h2>
+            <p>
               {languages.map((l) => `${l.name} (${l.level})`).join(', ')}
             </p>
           </section>
 
           {/* Interests */}
           <section className="space-y-3">
-            <h2 className="text-xl font-semibold">Interests</h2>
-            <p className="text-gray-700 dark:text-gray-300">{interests.join(', ')}</p>
+            <h2 className="text-xl font-semibold text-accent">Interests</h2>
+            <p>{interests.join(', ')}</p>
           </section>
         </main>
 
-        <footer className="pt-8 border-t border-gray-200 dark:border-gray-800 print:hidden">
-          <p className="text-center text-sm text-gray-500 dark:text-gray-400 flex items-center justify-center gap-1">
+        <footer className="pt-8 border-t border-border print:hidden">
+          <p className="text-center text-sm text-muted flex items-center justify-center gap-1">
             {' Built with '}
             <a
               href="https://react.dev"
-              className="hover:text-blue-700 dark:hover:text-blue-300 transition-colors duration-150"
+              className="hover:underline"
             >
               React
             </a>

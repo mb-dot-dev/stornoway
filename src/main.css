@@ -1,7 +1,55 @@
 @import 'tailwindcss';
 
-/* Dark mode only on screen, so printing always uses the light palette. */
-@custom-variant dark (@media screen and (prefers-color-scheme: dark));
+/*
+ * 60-30-10 palette: Midnight Navy dominates (surfaces), Powder Blue is the
+ * secondary (text, borders, chips), Sunflower Yellow is the accent (headings,
+ * links, markers). Components use the semantic tokens below, never raw hexes,
+ * so print can swap in an ink-friendly light variant.
+ */
+:root {
+  --navy: #131d38;
+  --powder: #adc7e9;
+  --sunflower: #ffc20d;
+
+  --surface: var(--navy);
+  --raised: color-mix(in oklab, var(--navy) 94%, var(--powder));
+  --text: var(--powder);
+  --strong: color-mix(in oklab, var(--powder) 40%, #ffffff);
+  --muted: color-mix(in oklab, var(--powder) 75%, var(--navy));
+  --border: color-mix(in oklab, var(--powder) 22%, var(--navy));
+  --chip: var(--powder);
+  --on-chip: var(--navy);
+  --accent: var(--sunflower);
+  --on-accent: var(--navy);
+}
+
+@media print {
+  :root {
+    --surface: #ffffff;
+    --raised: #ffffff;
+    --text: var(--navy);
+    --strong: var(--navy);
+    --muted: color-mix(in oklab, var(--navy) 75%, #ffffff);
+    --border: var(--powder);
+    --chip: transparent;
+    --on-chip: var(--navy);
+    --accent: var(--navy);
+    --on-accent: #ffffff;
+  }
+}
+
+@theme inline {
+  --color-surface: var(--surface);
+  --color-raised: var(--raised);
+  --color-text: var(--text);
+  --color-strong: var(--strong);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-chip: var(--chip);
+  --color-on-chip: var(--on-chip);
+  --color-accent: var(--accent);
+  --color-on-accent: var(--on-accent);
+}
 
 /*
  * Globals live in the base layer: unlayered rules would beat every Tailwind
@@ -9,26 +57,26 @@
  */
 @layer base {
   :root {
-    color-scheme: light dark;
+    color-scheme: dark;
   }
 
   body {
-    background-color: light-dark(#ffffff, var(--color-gray-950));
-    color: light-dark(var(--color-slate-900), var(--color-slate-100));
+    background-color: var(--color-surface);
+    color: var(--color-text);
   }
 
   a {
-    color: light-dark(var(--color-blue-600), var(--color-blue-400));
+    color: var(--color-accent);
     text-underline-offset: 2px;
   }
 
   hr {
-    border-color: light-dark(var(--color-gray-200), var(--color-gray-800));
+    border-color: var(--color-border);
   }
 
   ::selection {
-    background-color: light-dark(var(--color-blue-200), var(--color-blue-800));
-    color: light-dark(var(--color-slate-900), #ffffff);
+    background-color: var(--color-accent);
+    color: var(--color-on-accent);
   }
 
   @media print {
