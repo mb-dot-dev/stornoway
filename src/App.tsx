@@ -199,8 +199,7 @@ function Period({ period }: { period: string }) {
   );
 }
 
-const linkClass =
-  'hover:underline inline-flex items-center gap-1';
+const linkClass = 'hover:underline inline-flex items-center gap-1';
 
 function Separator() {
   return <span aria-hidden="true">•</span>;
@@ -351,7 +350,10 @@ export default function App() {
                   <dd>
                     <ul className="flex flex-wrap gap-2">
                       {g.items.map((s) => (
-                        <li key={s} className="px-3 py-1 rounded-full bg-chip text-on-chip text-sm print:border print:border-border">
+                        <li
+                          key={s}
+                          className="px-3 py-1 rounded-full bg-chip text-on-chip text-sm print:border print:border-border"
+                        >
                           {s}
                         </li>
                       ))}
@@ -383,9 +385,7 @@ export default function App() {
           {/* Languages */}
           <section className="space-y-3">
             <h2 className="text-xl font-semibold text-accent">Languages</h2>
-            <p>
-              {languages.map((l) => `${l.name} (${l.level})`).join(', ')}
-            </p>
+            <p>{languages.map((l) => `${l.name} (${l.level})`).join(', ')}</p>
           </section>
 
           {/* Interests */}
@@ -398,10 +398,7 @@ export default function App() {
         <footer className="pt-8 border-t border-border print:hidden">
           <p className="text-center text-sm text-muted flex items-center justify-center gap-1">
             {' Built with '}
-            <a
-              href="https://react.dev"
-              className="hover:underline"
-            >
+            <a href="https://react.dev" className="hover:underline">
               React
             </a>
             {' | hosted on '}
