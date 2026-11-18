@@ -61,7 +61,7 @@ describe('build', () => {
     await build({ outDir });
     const html = await readFile(join(outDir, 'homelab/index.html'), 'utf8');
     expect(html).toMatch(/<h1[^>]*>Homelab<\/h1>/);
-    for (const label of ['What I run', 'How it fits together', 'What it taught me']) expect(html).toContain(label);
+    for (const name of ['Gitea Actions', 'Artifact Keeper', 'Arcane', 'Aspire Dashboard']) expect(html).toContain(name);
     const styles = [...html.matchAll(/<link rel="stylesheet"[^>]*href="(\/[^"]+\.css)"/g)];
     expect(styles).toHaveLength(1);
     expect(existsSync(join(outDir, styles[0]![1]!))).toBe(true);

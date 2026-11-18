@@ -1,15 +1,145 @@
 import { Fragment } from 'react';
-import { container, linkClass, sectionHeading, subHeading } from './layout';
+import { container, linkClass, sectionHeading } from './layout';
 
-const intro =
-  'A self-hosted platform I built to learn and practise: push-to-deploy CI/CD, package caching, messaging, ' +
-  'object storage and observability, running on a NAS and five mini PCs at home.';
+export const intro =
+  'The services I self-host on a NAS and five mini PCs at home: what each one is for, and what running it taught me.';
 
-export const tabs = [
-  { id: 'run', label: 'What I run' },
-  { id: 'fit', label: 'How it fits together' },
-  { id: 'taught', label: 'What it taught me' },
-] as const;
+type Service = {
+  id: string;
+  name: string;
+  what: string;
+  usedFor: string;
+  taught?: string;
+  // Neighbouring services as in-page links, or a plain note when there are none.
+  related: { label: string; ids?: string[] };
+};
+
+type Tile = { name: string; text: string };
+
+type Group = { name: string; blurb: string; services?: Service[]; tiles?: Tile[] };
+
+export const groups: Group[] = [
+  {
+    name: 'Build and deliver',
+    blurb: 'From a git push to an image ready to run',
+    services: [
+      {
+        id: 'gitea',
+        name: 'Gitea',
+        what: 'Self-hosted Git server',
+        usedFor: 'Hosting all my repositories. A push here starts every build.',
+        taught: 'Managing my own source control system.',
+        related: { label: 'Talks to', ids: ['actions'] },
+      },
+      {
+        id: 'actions',
+        name: 'Gitea Actions',
+        what: 'CI with GitHub Actions–compatible workflows',
+        usedFor: 'Building, testing and publishing container images on every push.',
+        taught:
+          'Scaling out action runners, and building on both amd64 and arm64. The workflows use the same syntax as ' +
+          'GitHub Actions, which I used at work.',
+        related: { label: 'Talks to', ids: ['keeper', 'cache', 'registry'] },
+      },
+      {
+        id: 'keeper',
+        name: 'Artifact Keeper',
+        what: 'Package proxy for NuGet, npm and PyPI',
+        usedFor: 'Every package a build restores comes through it and is cached locally.',
+        taught: "Faster builds: CI runs don't download every package from the internet each time.",
+        related: { label: 'Used by', ids: ['actions'] },
+      },
+      {
+        id: 'cache',
+        name: 'Docker Registry, as a pull-through cache',
+        what: 'Mirror of public base images',
+        usedFor: 'Serving base images to builds from the local network instead of Docker Hub.',
+        taught: "Faster builds: CI doesn't download every base image from the internet each time.",
+        related: { label: 'Used by', ids: ['actions'] },
+      },
+      {
+        id: 'registry',
+        name: 'Docker Registry',
+        what: 'Private image registry',
+        usedFor: 'Storing the images CI builds. Arcane pulls from here when it deploys.',
+        related: { label: 'Talks to', ids: ['arcane'] },
+      },
+    ],
+  },
+  {
+    name: 'Run',
+    blurb: 'Where the containers live',
+    services: [
+      {
+        id: 'arcane',
+        name: 'Arcane',
+        what: 'Docker management with GitOps sync',
+        usedFor:
+          'Managing the Docker hosts on the NAS and a NUC. A webhook tells it a new image exists, then it runs a ' +
+          'GitOps sync and redeploys the containers.',
+        taught:
+          'Making it work as one system. Running each service was easy. Wiring Gitea, Actions, the registry and ' +
+          'Arcane together so a push ends up deployed with no manual steps was the real work.',
+        related: { label: 'Pulls from', ids: ['registry'] },
+      },
+      {
+        id: 'aspire',
+        name: 'Aspire Dashboard',
+        what: 'OpenTelemetry logs, traces and metrics',
+        usedFor: 'Logs, traces and metrics from my apps in one place.',
+        taught:
+          "Observability doesn't have to be heavy. It gives me logs, traces and metrics with a very simple setup.",
+        related: { label: 'Receives from every app' },
+      },
+    ],
+  },
+  {
+    name: 'For the apps',
+    blurb: 'Backing services my apps use',
+    tiles: [
+      { name: 'PostgreSQL', text: 'Relational database for my apps.' },
+      { name: 'RabbitMQ', text: 'Message broker for my apps.' },
+      {
+        name: 'RustFS',
+        text: 'S3-compatible object storage, so code written against AWS S3 runs at home unchanged.',
+      },
+    ],
+  },
+  {
+    name: 'Automation and home',
+    blurb: 'Not part of the platform, but on the same network',
+    services: [
+      {
+        id: 'n8n',
+        name: 'n8n',
+        what: 'Workflow automation',
+        usedFor:
+          "Updating a Cloudflare DNS record with my public IP, and importing the Fuelio app's CSV export of my EV " +
+          'charging and refuelling data.',
+        taught: 'Small jobs that used to be a scheduled application are simpler as workflows.',
+        related: { label: 'Runs on its own schedule' },
+      },
+    ],
+    tiles: [
+      { name: 'Home Assistant', text: 'Home automation, on its own NUC.' },
+      { name: 'Pi-hole', text: 'Network-wide DNS and ad blocking, on its own NUC.' },
+    ],
+  },
+];
+
+export const services = groups.flatMap((g) => g.services ?? []);
+const byId = new Map(services.map((s) => [s.id, s]));
+const short = (id: string) => (id === 'cache' ? 'Registry cache' : byId.get(id)!.name);
+
+// The path a push takes, as service ids; '+' joins services used in the same step.
+export const pipeline = [
+  { id: 'gitea', next: '→' },
+  { id: 'actions', next: '→' },
+  { id: 'keeper', next: '+' },
+  { id: 'cache', next: '→' },
+  { id: 'registry', next: '→' },
+  { id: 'arcane', next: '' },
+];
 
 export const hardware = [
   { machine: 'UGREEN NAS + 1 Intel NUC', role: 'Docker hosts managed by Arcane, running the platform services' },
@@ -19,140 +149,61 @@ export const hardware = [
   { machine: 'UPS', role: 'Keeps it all running through power cuts' },
 ];
 
-export const serviceGroups = [
-  {
-    name: 'Delivery',
-    items: ['Gitea', 'Gitea Actions', 'Registry (Docker)', 'Artifact Keeper (NuGet, npm, PyPI)'],
-  },
-  { name: 'Runtime', items: ['Arcane', 'Docker'] },
-  { name: 'Data & messaging', items: ['PostgreSQL', 'RabbitMQ', 'RustFS (S3-compatible)'] },
-  { name: 'Observability', items: ['Aspire Dashboard (logs, traces, metrics)'] },
-  { name: 'Automation & home', items: ['n8n', 'Home Assistant', 'Pi-hole'] },
-];
+const label = 'text-[11px] font-semibold uppercase tracking-[0.12em]';
+const pill = 'font-mono rounded-full';
 
-export const flow = [
-  { step: 'Push', text: 'to Gitea.' },
-  {
-    step: 'Build',
-    text: 'in Gitea Actions, pulling packages through Artifact Keeper and base images through the registry cache.',
-  },
-  { step: 'Publish', text: 'the image to the local Docker registry.' },
-  { step: 'Notify', text: 'a webhook tells Arcane a new version exists.' },
-  { step: 'Sync', text: 'Arcane runs a GitOps sync and redeploys the containers.' },
-];
-
-export const lessons = [
-  {
-    title: 'Making it work as one system',
-    text:
-      "The hard part wasn't running each service. It was wiring Gitea, Actions, the registry and Arcane together " +
-      'so a push ends up deployed with no manual steps.',
-  },
-  {
-    title: 'Faster builds',
-    text:
-      'Artifact Keeper caches NuGet, npm and PyPI packages, and a local registry and registry cache serve container ' +
-      "images, so CI runs don't download everything from the internet each time.",
-  },
-  {
-    title: 'Replacing cron apps with workflows',
-    text:
-      'Small jobs that used to be a scheduled application are now n8n workflows: updating a Cloudflare DNS record ' +
-      'with my public IP, and importing the CSV export from the Fuelio app, which holds my EV charging and ' +
-      'refuelling data.',
-  },
-];
-
-const chip = 'px-3 py-0.5 rounded-full bg-chip text-on-chip text-[13px] font-medium print:border print:border-border';
-
-function WhatIRun() {
+function ServiceCard({ s }: { s: Service }) {
   return (
-    <div className="grid gap-10 md:grid-cols-2">
-      <div className="space-y-4 min-w-0">
-        <h3 className={subHeading}>Hardware</h3>
-        <dl className="space-y-3 text-[15px]">
-          {hardware.map((h) => (
-            <div key={h.machine + h.role} className="space-y-0.5">
-              <dt className="font-semibold text-strong">{h.machine}</dt>
-              <dd>{h.role}</dd>
-            </div>
-          ))}
-        </dl>
+    <article
+      id={s.id}
+      className="scroll-mt-6 flex flex-col gap-4 min-w-0 rounded-2xl border border-border bg-raised p-5 target:border-accent print:break-inside-avoid"
+    >
+      <div className="space-y-0.5">
+        <h3 className="text-[19px] leading-snug font-semibold text-strong">{s.name}</h3>
+        <p className="text-[13px] text-muted">{s.what}</p>
       </div>
-      <div className="space-y-4 min-w-0">
-        <h3 className={subHeading}>Services</h3>
-        <dl className="space-y-3">
-          {serviceGroups.map((g) => (
-            <div key={g.name} className="flex flex-wrap gap-x-3 gap-y-1.5">
-              <dt className="w-36 shrink-0 pt-0.5 text-sm font-medium text-muted">{g.name}</dt>
-              <dd className="flex-1 min-w-48">
-                <ul className="flex flex-wrap gap-1.5">
-                  {g.items.map((s) => (
-                    <li key={s} className={chip}>
-                      {s}
-                    </li>
-                  ))}
-                </ul>
-              </dd>
-            </div>
-          ))}
-        </dl>
-        <p className="pt-2 text-[15px]">
-          <strong className="text-strong">Next:</strong> moving workloads onto the two-node Kubernetes cluster.
-        </p>
-      </div>
-    </div>
-  );
-}
-
-function HowItFits() {
-  return (
-    <div className="space-y-6">
-      <ol className="grid gap-3 md:grid-cols-5 print:grid-cols-1">
-        {flow.map((f, i) => (
-          <li
-            key={f.step}
-            className="rounded-2xl border border-border bg-raised p-4 space-y-1 print:break-inside-avoid"
+      <dl className="space-y-3 text-[15px]">
+        <div>
+          <dt className={`${label} text-accent`}>Used for</dt>
+          <dd className="mt-0.5">{s.usedFor}</dd>
+        </div>
+        {s.taught ? (
+          <div>
+            <dt className={`${label} text-accent`}>Taught me</dt>
+            <dd className="mt-0.5 text-strong">{s.taught}</dd>
+          </div>
+        ) : null}
+      </dl>
+      <p className="mt-auto flex flex-wrap items-center gap-1.5 border-t border-border pt-3 text-xs text-muted">
+        {s.related.label}
+        {s.related.ids?.map((id) => (
+          <a
+            key={id}
+            href={`#${id}`}
+            className={`${pill} px-2 bg-chip text-on-chip hover:bg-accent print:border print:border-border`}
           >
-            <span aria-hidden="true" className="block text-sm text-muted">
-              {`${i + 1}`}
-            </span>
-            <strong className="block font-semibold text-strong">{f.step}</strong>
-            <span className="block text-[15px]">{f.text}</span>
-          </li>
+            {short(id)}
+          </a>
         ))}
-      </ol>
-      <p className="max-w-3xl text-[15px]">
-        <strong className="text-strong">Running alongside:</strong> PostgreSQL, RabbitMQ and RustFS for apps; Aspire
-        Dashboard collects logs, traces and metrics.
       </p>
-    </div>
+    </article>
   );
 }
 
-function WhatItTaughtMe() {
+function TileCard({ t }: { t: Tile }) {
   return (
-    <div className="grid gap-4 md:grid-cols-3">
-      {lessons.map((l) => (
-        <article
-          key={l.title}
-          className="rounded-2xl border border-border bg-raised p-5 space-y-2 print:break-inside-avoid"
-        >
-          <h3 className="text-[17px] leading-snug font-semibold text-strong">{l.title}</h3>
-          <p className="text-[15px]">{l.text}</p>
-        </article>
-      ))}
+    <div className="rounded-xl border border-border px-4 py-3.5 space-y-1 print:break-inside-avoid">
+      <h3 className="font-semibold text-strong">{t.name}</h3>
+      <p className="text-sm">{t.text}</p>
     </div>
   );
 }
-
-const panels = { run: WhatIRun, fit: HowItFits, taught: WhatItTaughtMe };
 
 export default function Homelab() {
   return (
     <div className="min-h-screen">
       <header className="bg-raised border-b border-border">
-        <div className={`${container} py-12 lg:py-14 space-y-3 print:pt-0 print:pb-6`}>
+        <div className={`${container} py-10 lg:py-12 space-y-3 print:pt-0 print:pb-6`}>
           <p className="text-sm print:hidden">
             <a href="/" className={linkClass}>
               <span aria-hidden="true">←</span> Back to CV
@@ -161,45 +212,74 @@ export default function Homelab() {
           <p className="text-sm font-semibold uppercase tracking-[0.14em] text-accent">Bence Molnár</p>
           <h1 className="text-5xl lg:text-6xl font-bold tracking-tight leading-none text-strong">Homelab</h1>
           <p className="pt-2 max-w-3xl text-lg text-strong">{intro}</p>
+          <nav aria-label="Deploy path" className="pt-3">
+            <ol className="flex flex-wrap items-center gap-x-1.5 gap-y-2 text-sm">
+              <li className={`${label} mr-1.5 text-muted`} aria-hidden="true">
+                A push travels
+              </li>
+              {pipeline.map((p) => (
+                <Fragment key={p.id}>
+                  <li>
+                    <a
+                      href={`#${p.id}`}
+                      className={`${pill} block px-2.5 py-0.5 text-[13px] border border-border bg-surface text-strong hover:border-accent`}
+                    >
+                      {short(p.id)}
+                    </a>
+                  </li>
+                  {p.next ? (
+                    <li aria-hidden="true" className="text-accent">
+                      {p.next}
+                    </li>
+                  ) : null}
+                </Fragment>
+              ))}
+            </ol>
+          </nav>
         </div>
       </header>
 
-      <main className={`${container} py-12 lg:py-14`}>
-        <div className="homelab-tabs space-y-8">
-          <fieldset className="flex flex-wrap gap-x-2 border-b border-border print:hidden">
-            <legend className="sr-only">Homelab sections</legend>
-            {tabs.map((t, i) => (
-              <Fragment key={t.id}>
-                <input
-                  type="radio"
-                  name="homelab-tab"
-                  id={`tab-${t.id}`}
-                  className="sr-only"
-                  defaultChecked={i === 0}
-                />
-                <label
-                  htmlFor={`tab-${t.id}`}
-                  className="cursor-pointer px-3 py-2 -mb-px border-b-2 text-[15px] font-medium"
-                >
-                  {t.label}
-                </label>
-              </Fragment>
+      <main className={`${container} py-10 lg:py-12 space-y-12`}>
+        {groups.map((g) => (
+          <section key={g.name} className="space-y-4">
+            <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
+              <h2 className={sectionHeading}>{g.name}</h2>
+              <p className="text-sm text-muted">{g.blurb}</p>
+            </div>
+            {g.services ? (
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 print:grid-cols-2">
+                {g.services.map((s) => (
+                  <ServiceCard key={s.id} s={s} />
+                ))}
+              </div>
+            ) : null}
+            {g.tiles ? (
+              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                {g.tiles.map((t) => (
+                  <TileCard key={t.name} t={t} />
+                ))}
+              </div>
+            ) : null}
+          </section>
+        ))}
+
+        <section className="space-y-4 print:break-inside-avoid">
+          <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
+            <h2 className={sectionHeading}>Runs on</h2>
+            <p className="text-sm text-muted">The hardware under it all</p>
+          </div>
+          <dl className="grid gap-x-8 sm:grid-cols-2 lg:grid-cols-3 text-sm">
+            {hardware.map((h) => (
+              <div key={h.machine + h.role} className="space-y-0.5 border-b border-border py-2.5">
+                <dt className="font-semibold text-strong">{h.machine}</dt>
+                <dd>{h.role}</dd>
+              </div>
             ))}
-          </fieldset>
-          {tabs.map((t) => {
-            const Panel = panels[t.id];
-            return (
-              <section
-                key={t.id}
-                id={`panel-${t.id}`}
-                className="homelab-panel space-y-6 print:break-inside-avoid-page"
-              >
-                <h2 className={`homelab-panel-heading ${sectionHeading}`}>{t.label}</h2>
-                <Panel />
-              </section>
-            );
-          })}
-        </div>
+          </dl>
+          <p className="text-[15px]">
+            <strong className="text-strong">Next:</strong> moving workloads onto the two-node Kubernetes cluster.
+          </p>
+        </section>
       </main>
     </div>
   );
