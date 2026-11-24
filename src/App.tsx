@@ -16,32 +16,28 @@ export const highlights = [
   {
     lead: 'Built the billing pipeline',
     text:
-      " behind Skyscanner's partner invoicing: Apache Spark jobs turning 2–3M redirects a month per revenue-tracking configuration " +
-      'into £40M+ a month of billable revenue across 1,200 partners, mission-critical during the first-week-of-month billing cycle.',
+      " behind Skyscanner's partner invoicing, turning millions of redirects into £40M+ a month of billable revenue across 1,200 partners. " +
+      'It had to run without fail in the first week of each month, when billing closes.',
   },
   {
-    lead: 'Grew revenue 7%',
-    text: ' with a single A/B test of the redesigned, search-led Agoda home page.',
+    lead: 'Lifted revenue 7%',
+    text: ' with the redesigned, search-led Agoda home page, measured in an A/B test.',
   },
   {
     lead: 'Made xe.com the single source of truth for exchange rates',
-    text: ' across all financial systems (Workday, Kyriba), eliminating conversion rate differences between them.',
+    text: ' across Workday and Kyriba.',
   },
   {
     lead: 'Replaced Splunk alerting',
-    text:
-      ' for 4 SOx-scoped production databases with an in-house system that runs for about $3 a week on AWS, ' +
-      "so Splunk could be decommissioned for this use and audit logs stayed in Skyscanner's own AWS estate.",
+    text: ' for 4 SOx-scoped production databases with an in-house system that costs about $3 a week to run on AWS.',
   },
   {
     lead: 'Owned SOx compliance',
-    text:
-      ' for the finance tooling: IT general controls across ~15 repos plus 4 financial controls, ' +
-      'tightening access by applying least privilege, including separate database users for migrations and the web app.',
+    text: ' for the finance tooling, covering IT general controls across ~15 repos and 4 financial controls.',
   },
   {
-    lead: 'Engineering lead for Finance:',
-    text: ' the main point of contact for the finance team, on the on-call rota, and mentor to junior engineers.',
+    lead: 'Led engineering for Finance',
+    text: ' as the main point of contact for the finance team, on the on-call rota, and mentor to junior engineers.',
   },
 ];
 export const languages = [
@@ -84,18 +80,18 @@ export const experiences = [
           'Led the design and build of an in-house privileged-access monitoring system for the 4 SOx-scoped production databases, ' +
           'replacing Splunk alerting so it could be decommissioned and keeping audit logs within our own AWS estate. ' +
           'Runs for about $3 a week on AWS Batch, Firehose streaming and S3 archiving, ' +
-          'and gives external auditors a self-serve evidence trail.',
+          'and lets external auditors pull evidence themselves.',
         tech: ['Python', 'AWS Batch', 'AWS CloudWatch', 'AWS Firehose', 'AWS S3'],
       },
       {
-        name: 'Bespoke Financial Tools',
+        name: 'In-house finance tooling',
         description:
           "Led development of Skyscanner's in-house finance tooling. " +
-          'Built the billing staging pipeline: Apache Spark jobs aggregated 2–3 million redirects a month per revenue-tracking configuration ' +
+          'Built the billing staging pipeline, where Apache Spark jobs aggregated 2–3 million redirects a month per revenue-tracking configuration ' +
           'and attributed the billable revenue to partner accounts, ready for finance to invoice. ' +
-          'Integrated with the trade-credit insurer: open invoices were sent for coverage and partner credit limits were synced back to Customer records in Workday. ' +
+          'Integrated with the trade-credit insurer, sending open invoices for coverage and syncing partner credit limits back to Customer records in Workday. ' +
           'Automated loading of xe.com exchange rates into Workday and the Kyriba treasury system, ' +
-          'making xe.com the single source of truth for rates across all financial systems and eliminating conversion rate differences.',
+          'so both used the same rates and converted amounts matched between them.',
         tech: [
           'C#',
           'Python',
@@ -106,16 +102,16 @@ export const experiences = [
           'AWS',
           'Node.js',
           'SQL Server',
-          'Postgres',
+          'PostgreSQL',
           'MySQL',
         ],
       },
       {
         name: 'SOx control ownership',
         description:
-          'SOx control owner for the finance tooling: IT general controls across ~15 repositories plus 4 financial controls. ' +
+          'SOx control owner for the finance tooling, covering IT general controls across ~15 repositories plus 4 financial controls. ' +
           'Ran the quarterly control audits and user access reviews, and documented how control evidence is provided to auditors. ' +
-          'Continuously tightened access by applying least privilege, including separate database users for schema migrations and the web app.',
+          'Tightened access by applying least privilege, including separate database users for schema migrations and the web app.',
       },
       {
         name: 'Python application configuration facility',
@@ -136,8 +132,7 @@ export const experiences = [
       {
         name: 'Email ingestion system',
         description:
-          "Developed and maintained the email ingestion platform that imported new customers' existing mailbox archives into Mimecast, " +
-          'a key step in customer onboarding.',
+          "Developed and maintained the email ingestion platform that imported new customers' existing mailbox archives into Mimecast.",
         tech: ['.NET', 'C#'],
       },
     ],
@@ -166,7 +161,7 @@ export const experiences = [
       {
         name: 'Agoda Home Page',
         description:
-          'Delivered the redesigned, search-led responsive home page (August 2014), which increased revenue by 7% in a single A/B test.',
+          'Delivered the redesigned, search-led responsive home page (August 2014). An A/B test showed it lifted revenue by 7%.',
         tech: ['ASP.NET', 'C#', 'JavaScript'],
       },
     ],
